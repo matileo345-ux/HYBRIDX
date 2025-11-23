@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 1 – HYBRIDX</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header><a href="index.html" class="back-btn">← Back</a><div class="logo">HYBRIDX</div></header>
+  <main class="step-hero">
+    <h2>Step 1: Enter Your Email</h2>
+    <p>We’ll send you updates + your referral link after registration.</p>
+    <input type="email" id="email" placeholder="your@email.com">
+    <button class="submit-btn" onclick="next()">Continue →</button>
+  </main>
+  <script>
+    function next() {
+      const e = document.getElementById('email').value.trim();
+      if (!e.includes('@')) return alert('Valid email required');
+      localStorage.setItem('userEmail', e);
+      window.location.href = 'deposit.html';
+    }
+  </script>
+</body>
+</html>
