@@ -3,20 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Step 2 – Deposit $2 BNB</title>
+  <title>Step 2 – Deposit</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <a href="index.html" class="back-btn">← Back</a>
-    <div class="logo">HYBRIDX</div>
-  </header>
-
+  <header><a href="index.html" class="back-btn">Back</a><div class="logo">HYBRIDX</div></header>
+  
   <main class="step-hero">
     <h2>Step 2 – Send $2 BNB</h2>
-    <p>Send exactly <strong>$2 worth of BNB</strong> to the address below.<br>This qualifies you for the $50 BNB staking bonus.</p>
-
-    <div style="font-size:60px;margin:30px 0;">Money Bag</div>
+    <p>Send exactly $2 worth of BNB to qualify for your $50 BNB staking bonus.</p>
 
     <div class="address-box">
       0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac
@@ -25,27 +20,20 @@
     <button class="copy-btn" onclick="copyAddr()">Copy Address</button>
 
     <div class="qr-code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac" alt="QR Code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac">
     </div>
 
     <div class="warning">
-      Warning: Send from your personal wallet (MetaMask, Trust Wallet, etc.)<br>
-      Do NOT send from an exchange!
+      Warning: Send only from your personal wallet (MetaMask, Trust Wallet)<br>
+      Never send from an exchange
     </div>
 
-    <button class="submit-btn" onclick="next()">I’ve Sent the $2 BNB →</button>
+    <button class="submit-btn" onclick="next()">I’ve Sent → Continue</button>
   </main>
 
   <script>
-    function copyAddr() {
-      navigator.clipboard.writeText('0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac');
-      alert('Deposit address copied!');
-    }
-    function next() {
-      if (confirm('Did you really send $2 BNB?')) {
-        window.location.href = 'wallet.html';
-      }
-    }
+    function copyAddr(){navigator.clipboard.writeText('0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac');alert('Copied!')}
+    function next(){if(confirm('Confirmed sent?'))window.location.href='wallet.html'}
   </script>
 </body>
 </html>
