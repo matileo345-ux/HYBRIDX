@@ -1,3 +1,8 @@
+header { padding:20px; display:flex; justify-content:flex-start; align-items:center; gap:15px; }
+.header-left { display:flex; align-items:center; gap:15px; }
+.about-btn { background:#00ffff22; color:#00ffff; padding:10px 20px; border-radius:30px; text-decoration:none; border:1px solid #00ffff; font-weight:bold; }
+.logo-img { width:50px; height:50px; border-radius:12px; }
+.logo-text { font-size:28px; font-weight:bold; background:linear-gradient(90deg,#00ff00,#00ffff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   background: #000;
