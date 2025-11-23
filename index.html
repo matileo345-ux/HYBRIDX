@@ -1,73 +1,60 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HYBRIDX – World’s First Hybrid Launchpool | Q1 2026</title>
+  <title>HYBRIDX – World's First Hybrid Launchpool</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="logo.png" type="image/png">
-  <meta property="og:title" content="HYBRIDX – Hybrid Launchpool">
-  <meta property="og:description" content="Deposit $2 BNB → Get $50 BNB to stake + earn $HYBX before DEX listing">
-  <meta property="og:image" content="https://matik.github.io/HYBRIDX/logo.png">
 </head>
 <body>
-
-<header>
-  <div class="header-left">
-    <img src="logo.png" alt="HYBRIDX" class="logo-img">
-    <div class="logo-text">HYBRIDX</div>
-  </div>
-  <div class="header-right">
-    <a href="https://t.me/hybridx_ann" target="_blank" class="social">Telegram</a>
-    <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="social">X</a>
-    <a href="about.html" class="nav-btn">Whitepaper</a>
-  </div>
-</header>
-
-<main>
-  <section class="hero">
-    <div class="tag">LIVE WAITLIST — Q1 2026 LAUNCH ON BSC</div>
-    <h1>The World's First <span class="green">Hybrid</spangreen> <span class="cyan">Launchpool</span></h1>
-    <p class="hero-text">Secure your spot now: Deposit minimum $2 BNB → Receive $50 BNB for staking<br>Every 10 referrals = extra $5 BNB bonus</p>
-    <div class="stats">
-      <div><strong>1 000 000</strong><br>Spots Available</div>
-      <div><strong>$2</strong><br>Min Deposit</div>
-      <div><strong>$50</strong><br>You Receive to Stake</div>
+  <header>
+    <div class="header-left">
+      <a href="about.html" class="about-btn">About</a>
+      <img src="logo.png" alt="HYBRIDX" class="logo-img">
+      <div class="logo-text">HYBRIDX</div>
     </div>
-    <a href="email.html" class="cta-btn">SECURE MY SPOT NOW</a>
-  </section>
+  </header>
 
-  <section class="features">
-    <div class="feat">Dual Rewards: Staking + Guaranteed IDO Allocations</div>
-    <div class="feat">100% Non-Custodial – You control your funds</div>
-    <div class="feat">Referral Program – Earn unlimited bonus BNB</div>
-  </section>
+  <main>
+    <section class="hero">
+      <div class="tag">LIVE WAITLIST — Q1 2026 LAUNCH ON BSC</div>
+      <h1>The World's First <span class="green">Hybrid</span> <span class="cyan">Launchpool</span></h1>
+      
+      <div class="stats-grid">
+        <div class="stat-box"><strong>1 000 000</strong><br>Spots Available</div>
+        <div class="stat-box"><strong>$2</strong><br>Min Deposit</div>
+        <div class="stat-box"><strong>$50</strong><br>You Receive to Stake</div>
+      </div>
 
-  <section class="countdown">
-    <h2>Waitlist Ends In</h2>
-    <div id="timer">Loading…</div>
-  </section>
+      <p class="subtitle">Every 10 referrals = extra $5 BNB bonus</p>
+      <a href="email.html" class="cta-btn">SECURE MY SPOT</a>
+    </section>
 
-  <section class="partners">
-    <p>Powered by Binance Smart Chain • Audited by CertiK (in progress)</p>
-  </section>
+    <section class="feature-box">Referral Program — Earn unlimited bonus BNB</section>
 
-  <section class="follow">
-    <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="follow-btn big">Follow @HYBRIDX_HYBX for Updates</a>
-  </section>
-</main>
+    <section class="roadmap">
+      <h2>Roadmap</h2>
+      <div class="phase">1 Waitlist Phase (Now)<br>Deposit $2 BNB → Get $50 BNB to stake</div>
+      <div class="phase">2 Launchpool Staking (Q1 2026)<br>Earn $HYBX daily</div>
+      <div class="phase">3 DEX Listing (Q1 2026)<br>$HYBX on PancakeSwap</div>
+      <div class="phase">4 Full Launch (Q2 2026)<br>Hybrid platform live + first IDOs</div>
+    </section>
 
-<script>
-  // Fake countdown (makes it look very real)
-  const end = new Date("2026-01-01");
-  const timer = setInterval(() => {
-    const now = new Date();
-    const diff = end - now;
-    const d = Math.floor(diff / 864e5);
-    const h = Math.floor(diff % 864e5 / 36e5);
-    const m = Math.floor(diff % 36e5 / 6e4);
-    document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m`;
-  }, 1000);
-</script>
+    <section class="tokenomics">
+      <h2>$HYBX Tokenomics</h2>
+      <p>Total Supply: 1,000,000,000 $HYBX</p>
+      <div class="alloc">Launchpool: 10% • Liquidity: 20% • Development: 15% • Marketing: 10% • Team (vested): 15% • Community: 30%</div>
+    </section>
+
+    <section class="feature-box">Explosive Growth Potential<br>Early stakers get maximum $HYBX before listing</section>
+
+    <div style="text-align:center;padding:40px;">
+      <a href="email.html" class="cta-btn small">Join Waitlist Now</a>
+    </div>
+
+    <div class="follow-btn">
+      <a href="https://x.com/HYBRIDX_HYBX">Follow @HYBRIDX_HYBX for Updates</a>
+    </div>
+  </main>
 </body>
 </html>
