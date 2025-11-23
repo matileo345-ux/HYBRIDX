@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 3 – Submit Wallet</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="back-btn">← Back</a>
+    <div class="logo">HYBRIDX</div>
+  </header>
+
+  <main class="step-hero">
+    <h2>Step 3 – Submit Your Wallet</h2>
+    <p>Enter the exact wallet address you used to send the $2 BNB.<br>We will verify the deposit and secure your spot.</p>
+
+    <input type="text" id="wallet" placeholder="0x..." style="width:90%;padding:15px;margin:20px 0;font-size:16px;border-radius:10px;border:1px solid #00ff00;background:#000;color:#fff;">
+
+    <button class="submit-btn" onclick="submitWallet()">Complete Registration Checkmark</button>
+  </main>
+
+  <script>
+    function submitWallet() {
+      const w = document.getElementById('wallet').value.trim();
+      if (!w.startsWith('0x') || w.length !== 42) {
+        alert('Please enter a valid BNB wallet address (42 characters starting with 0x)');
+        return;
+      }
+      localStorage.setItem('userWallet', w);
+      alert('Wallet saved! Finalizing your spot…');
+      window.location.href = 'success.html';
+    }
+  </script>
+</body>
+</html>
