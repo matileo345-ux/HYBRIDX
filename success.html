@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to HYBRIDX!</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header><a href="index.html" class="back-btn">← Home</a><div class="logo">HYBRIDX</div></header>
+  <main class="success-hero">
+    <h2>🎉 Congratulations!</h2>
+    <p>You’ve secured your spot.<br>Your $50 BNB staking bonus is confirmed.</p>
+
+    <div style="background:#111;padding:25px;border-radius:15px;margin:30px 0;border:2px solid #00ff00;text-align:center;">
+      <h3>Your Personal Referral Link</h3>
+      <div style="color:#00ffff;font-size:17px;word-break:break-all;background:#000;padding:15px;border-radius:10px;margin:15px 0;">
+        <span id="finalLink">Loading…</span>
+      </div>
+      <button class="copy-btn" style="padding:15px 30px;font-size:18px;" onclick="copyLink()">
+        Copy & Share Now
+      </button>
+      <p style="margin-top:15px;">Every 10 referrals = +$5 BNB bonus for staking</p>
+    </div>
+
+    <a href="https://x.com/HYBRIDX_HYBX" class="follow-btn">Follow @HYBRIDX_HYBX for updates</a>
+  </main>
+
+  <script>
+    // Generate referral link only once, on success
+    let code = localStorage.getItem('refCode');
+    if (!code) {
+      code = 'HYB' + Math.random().toString(36).substr(2, 7).toUpperCase();
+      localStorage.setItem('refCode', code);
+    }
+    const link = `https://matik.github.io/HYBRIDX/?ref=${code}`;
+    document.getElementById('finalLink').textContent = link;
+
+    function copyLink() {
+      navigator.clipboard.writeText(link);
+      alert('Referral link copied! Share everywhere');
+    }
+  </script>
+</body>
+</html>
