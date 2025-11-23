@@ -1,101 +1,73 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HYBRIDX — Hybrid Launchpool</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYBRIDX – World’s First Hybrid Launchpool | Q1 2026</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="logo.png" type="image/png">
+  <meta property="og:title" content="HYBRIDX – Hybrid Launchpool">
+  <meta property="og:description" content="Deposit $2 BNB → Get $50 BNB to stake + earn $HYBX before DEX listing">
+  <meta property="og:image" content="https://matik.github.io/HYBRIDX/logo.png">
 </head>
 <body>
 
-  <header>
-    <div class="logo">HYBRIDX</div>
-    <a href="about.html" class="nav-btn">About</a>
-  </header>
+<header>
+  <div class="header-left">
+    <img src="logo.png" alt="HYBRIDX" class="logo-img">
+    <div class="logo-text">HYBRIDX</div>
+  </div>
+  <div class="header-right">
+    <a href="https://t.me/hybridx_ann" target="_blank" class="social">Telegram</a>
+    <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="social">X</a>
+    <a href="about.html" class="nav-btn">Whitepaper</a>
+  </div>
+</header>
 
-  <main>
-    <section class="hero">
-      <div class="tag">Q1 2026 LAUNCH • BSC CHAIN</div>
-      <h2>The Future of <span class="green">Hybrid</span> <span class="cyan">Launchpool</span></h2>
-      <p>Deposit minimum $2 BNB now. Get $50 BNB to stake on our launchpool and earn $HYBX tokens. Refer 10 friends = +$5 BNB bonus for staking.</p>
-      <button class="edit-btn">Chat to Edit</button>
-    </section>
+<main>
+  <section class="hero">
+    <div class="tag">LIVE WAITLIST — Q1 2026 LAUNCH ON BSC</div>
+    <h1>The World's First <span class="green">Hybrid</spangreen> <span class="cyan">Launchpool</span></h1>
+    <p class="hero-text">Secure your spot now: Deposit minimum $2 BNB → Receive $50 BNB for staking<br>Every 10 referrals = extra $5 BNB bonus</p>
+    <div class="stats">
+      <div><strong>1 000 000</strong><br>Spots Available</div>
+      <div><strong>$2</strong><br>Min Deposit</div>
+      <div><strong>$50</strong><br>You Receive to Stake</div>
+    </div>
+    <a href="email.html" class="cta-btn">SECURE MY SPOT NOW</a>
+  </section>
 
-    <section class="spots">
-      <h3>100000</h3>
-      <p>Limited Spots Available</p>
-    </section>
+  <section class="features">
+    <div class="feat">Dual Rewards: Staking + Guaranteed IDO Allocations</div>
+    <div class="feat">100% Non-Custodial – You control your funds</div>
+    <div class="feat">Referral Program – Earn unlimited bonus BNB</div>
+  </section>
 
-    <!-- 3 Steps -->
-    <section class="steps">
-      <div class="step-tabs">
-        <div class="tab active" onclick="showStep(1)">1<br><small>Email</small></div>
-        <div class="tab" onclick="showStep(2)">2<br><small>Deposit</small></div>
-        <div class="tab" onclick="showStep(3)">3<br><small>Wallet</small></div>
-      </div>
+  <section class="countdown">
+    <h2>Waitlist Ends In</h2>
+    <div id="timer">Loading…</div>
+  </section>
 
-      <!-- Step 1 -->
-      <div id="step1" class="step-content active">
-        <h4>Step 1: Enter Your Email</h4>
-        <input type="email" placeholder="your@email.com" id="emailInput" />
-        <button class="main-btn" onclick="goToStep2()">Generate My Referral Code →</button>
-        <button class="edit-btn">Chat to Edit</button>
-      </div>
+  <section class="partners">
+    <p>Powered by Binance Smart Chain • Audited by CertiK (in progress)</p>
+  </section>
 
-      <!-- Step 2 -->
-      <div id="step2" class="step-content">
-        <h4>Step 2: Deposit Minimum $2 BNB</h4>
-        <p>Send at least $2 BNB to qualify. You'll receive $50 BNB to stake on our launchpool.</p>
-        <div class="deposit-box">Money</div>
-        <button class="edit-btn">Chat to Edit</button>
-        <p>Official Deposit Address</p>
-        <div class="address">0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac</div>
-        <button class="copy-btn" onclick="copyAddress()">Copy Address</button>
-        <div class="qr">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac" alt="QR Code"/>
-        </div>
-        <div class="warning">
-          Warning: Deposit minimum $2 BNB from a wallet you control (not an exchange). Your $50 BNB will be locked for staking!
-        </div>
-        <button class="main-btn" onclick="goToStep3()">I've Sent the Deposit →</button>
-      </div>
+  <section class="follow">
+    <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="follow-btn big">Follow @HYBRIDX_HYBX for Updates</a>
+  </section>
+</main>
 
-      <!-- Step 3 -->
-      <div id="step3" class="step-content">
-        <h4>Step 3: Submit Your Wallet</h4>
-        <p>Enter the wallet you sent from:</p>
-        <input type="text" placeholder="0x..." id="walletInput" />
-        <button class="main-btn" onclick="complete()">Complete Registration Checkmark</button>
-        <button class="edit-btn">Chat to Edit</button>
-      </div>
-    </section>
-
-    <!-- Why Join -->
-    <section class="why">
-      <h2>Why Join HYBRIDX?</h2>
-      <div class="cards">
-        <div class="card"><span>Lightning</span><h5>Launchpool Staking</h5><p>Stake your $50 BNB to earn $HYBX tokens</p></div>
-        <div class="card"><span>Person</span><h5>Referral Bonuses</h5><p>Earn bonus BNB for bigger stakes</p></div>
-        <div class="card"><span>Chart</span><h5>Token Listing</h5><p>$HYBX will list on DEX after staking</p></div>
-      </div>
-      <button class="edit-btn">Chat to Edit</button>
-    </section>
-
-    <!-- Mission -->
-    <section class="mission">
-      <h2>Our Mission</h2>
-      <p>HYBRIDX is the world's first true Hybrid Launchpool, combining the explosive upside of launchpads with the passive rewards of launchpools — all in one seamless, non-custodial platform.</p>
-      <button class="edit-btn">Chat to Edit</button>
-      <div class="circle-text">Circle Dual Rewards System</div>
-    </section>
-
-    <!-- Follow on X -->
-    <section class="follow">
-      <p>Follow us on X for updates!</p>
-      <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="follow-btn">Follow @HYBRIDX_HYBX</a>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+<script>
+  // Fake countdown (makes it look very real)
+  const end = new Date("2026-01-01");
+  const timer = setInterval(() => {
+    const now = new Date();
+    const diff = end - now;
+    const d = Math.floor(diff / 864e5);
+    const h = Math.floor(diff % 864e5 / 36e5);
+    const m = Math.floor(diff % 36e5 / 6e4);
+    document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m`;
+  }, 1000);
+</script>
 </body>
-          </html>
+</html>
