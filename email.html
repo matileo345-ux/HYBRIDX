@@ -151,21 +151,3 @@
       }
     });
   </script>
-</body>
-</html> + bonus;
-    }
-    
-    // Check if user already has data
-    window.addEventListener('DOMContentLoaded', function() {
-      const userData = getUserData();
-      if (userData && userData.email && userData.referralCode) {
-        document.getElementById('emailInput').value = userData.email;
-        document.getElementById('referralCode').textContent = userData.referralCode;
-        document.getElementById('referralDisplay').style.display = 'block';
-        document.getElementById('referralStats').style.display = 'block';
-        updateReferralStats(userData.referralCode);
-      }
-    });
-  </script>
-</body>
-</html>
