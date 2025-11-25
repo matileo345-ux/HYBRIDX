@@ -1,8 +1,22 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-body { font-family: 'Inter', sans-serif; color: #000000; }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter',sans-serif; background:#000000; color:#222; line-height:1.6; }
+:root{
+  --bg: #000000;            /* page background */
+  --surface: #0b0b0b;       /* header/hero/card surfaces */
+  --surface-soft: #0f0f0f;  /* softer surfaces like email box / footer */
+  --muted: #9aa0a6;         /* muted text */
+  --text: #ffffff;          /* main text color */
+  --primary: #007BFF;       /* keep existing primary */
+}
 
+body, html {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height: 100%;
+}
 header { padding:20px 40px; background:white; box-shadow:0 2px 15px rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
 .header-left { display:flex; align-items:center; gap:15px; }
 .logo-img { width:50px; height:50px; border-radius:12px; }
