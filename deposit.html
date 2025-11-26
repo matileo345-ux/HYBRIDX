@@ -3,37 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Step 2 – Deposit</title>
+  <title>Deposit BNB - HYBRIDX</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header><a href="index.html" class="back-btn">Back</a><div class="logo">HYBRIDX</div></header>
-  
-  <main class="step-hero">
-    <h2>Step 2 – Send $2 BNB</h2>
-    <p>Send exactly $2 worth of BNB to qualify for your $50 BNB staking bonus.</p>
-
-    <div class="address-box">
-      0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac
+  <header>
+    <div class="header-left">
+      <img src="logo.png" alt="HYBRIDX" class="logo-img">
+      <div class="logo-text">HYBRIDX</div>
     </div>
+    <a href="index.html" class="about-btn">← Back</a>
+  </header>
 
-    <button class="copy-btn" onclick="copyAddr()">Copy Address</button>
+  <main>
+    <section class="hero">
+      <div class="tag">STEP 2: DEPOSIT BNB</div>
+      <h1>Secure Your <span class="gradient-text">Launchpool Spot</span></h1>
+      <p class="hero-text">Deposit minimum $2 BNB to unlock your $50 BNB stake allocation in the HYBRIDX launchpool.</p>
 
-    <div class="qr-code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac">
-    </div>
+      <div class="steps">
+        <div class="step"><span>1</span>Email</div>
+        <div class="step active"><span>2</span>Deposit</div>
+        <div class="step"><span>3</span>Wallet</div>
+      </div>
 
-    <div class="warning">
-      Warning: Send only from your personal wallet (MetaMask, Trust Wallet)<br>
-      Never send from an exchange
-    </div>
+      <!-- User Info Display -->
+      <div id="userInfo" class="email-box" style="display: none;">
+        <div style="background: rgba(102, 126, 234, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;">Your Email:</p>
+          <p id="userEmail" style="font-weight: 600; color: #667eea;"></p>
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-top: 12px; margin-bottom: 4px;">Your Referral Code:</p>
+          <p id="userReferralCode" style="font-weight: 700; font-size: 18px; color: #667eea; letter-spacing: 1px;"></p>
+        </div>
+      </div>
 
-    <button class="submit-btn" onclick="next()">I’ve Sent → Continue</button>
+      <!-- Deposit Box -->
+      <div class="email-box">
+        <h2>Make Your Deposit</h2>
+        
+        <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid rgba(16, 185, 129, 0.3);">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">You Will Receive:</p>
+          <p style="font-size: 36px; font-weight: 800; color: #10b981; margin-bottom: 4px;">$50 BNB</p>
+          <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">+ Bonus from referrals</p>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 24px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Deposit Amount (Minimum $2 BNB)</label>
+          <input type="number" id="depositAmount" placeholder="2.0000" min="2" step="0.0001" style="width: 100%; padding: 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-size: 18px; font-weight: 600;">
+          <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 8px;">BSC Network (BEP20)</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">Deposit Address:</p>
+          <div style="background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 6px; word-break: break-all; font-family: monospace; font-size: 13px; margin-bottom: 12px;">
+            <p id="depositAddress">0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb5</p>
+          </div>
+          <button class="generate-btn" onclick="copyAddress()" style="background: rgba(102, 126, 234, 0.2); width: 100%;">
+            📋 Copy Address
+          </button>
+        </div>
+
+        <div style="background: rgba(234, 179, 8, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 24px; border: 1px solid rgba(234, 179, 8, 0.3);">
+          <p style="font-size: 13px; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+            ⚠️ <strong>Important:</strong> Only send BNB on BSC (BEP20) network. Sending other tokens or wrong network will result in loss of funds.
+          </p>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 24px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Transaction Hash (After Deposit)</label>
+          <input type="text" id="txHash" placeholder="0x..." style="width: 100%; padding: 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-size: 14px; font-family: monospace;">
+          <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 8px;">Paste your transaction hash from BSCScan</p>
+        </div>
+
+        <button class="generate-btn" onclick="confirmDeposit()" style="width: 100%; border: none; cursor: pointer;">
+          Confirm Deposit →
+        </button>
+      </div>
+
+      <!-- Bonus Display -->
+      <div id="bonusDisplay" class="email-box" style="display: none; margin-top: 32px;">
+        <h2>💎 Your Total Stake Allocation</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 20px;">
+          <div style="background: rgba(102, 126, 234, 0.1); padding: 16px; border-radius: 8px; text-align: center;">
+            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;">Base</p>
+            <p style="font-size: 20px; font-weight: 700; color: #667eea;">$50</p>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.1); padding: 16px; border-radius: 8px; text-align: center;">
+            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;">Bonus</p>
+            <p id="bonusAmount" style="font-size: 20px; font-weight: 700; color: #10b981;">$0</p>
+          </div>
+          <div style="background: rgba(234, 179, 8, 0.1); padding: 16px; border-radius: 8px; text-align: center;">
+            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;">Total</p>
+            <p id="totalStake" style="font-size: 20px; font-weight: 700; color: #eab308;">$50</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-join">
+      <h2>What Happens Next?</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="icon">✅</div>
+          <h3>Deposit Verification</h3>
+          <p>Your deposit will be verified on BSCScan within 5-10 minutes</p>
+        </div>
+        <div class="card">
+          <div class="icon">🎁</div>
+          <h3>Receive Stake Allocation</h3>
+          <p>Your $50 BNB + bonuses will be allocated to your wallet for staking</p>
+        </div>
+        <div class="card">
+          <div class="icon">💰</div>
+          <h3>Start Earning</h3>
+          <p>Begin earning $HYBX tokens through launchpool staking</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <a href="https://x.com/HYBRIDX_HYBX" class="follow-btn">Follow X</a>
+    </footer>
   </main>
 
+  <script src="script.js"></script>
   <script>
-    function copyAddr(){navigator.clipboard.writeText('0x1a5a2291398c10ac24b6ddfe1d0a0215587c65ac');alert('Copied!')}
-    function next(){if(confirm('Confirmed sent?'))window.location.href='wallet.html'}
+    const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb5';
+
+    function copyAddress() {
+      copyToClipboard(DEPOSIT_ADDRESS);
+    }
+
+    function confirmDeposit() {
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      const txHash = document.getElementById('txHash').value.trim();
+      
+      // Validate amount
+      if (!amount || amount < 2) {
+        showNotification('Minimum deposit is $2 BNB', 'error');
+        return;
+      }
+      
+      // Validate transaction hash
+      if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
+        showNotification('Please enter a valid transaction hash', 'error');
+        return;
+      }
+      
+      // Update user data
+      updateUserData({
+        depositAmount: amount,
+        txHash: txHash,
+        depositCompleted: true,
+        depositTimestamp: new Date().toISOString()
+      });
+      
+      showNotification('Deposit confirmed! Redirecting to wallet setup...', 'success');
+      
+      // Redirect immediately
+      setTimeout(() => {
+        window.location.href = 'wallet.html';
+      }, 1500);
+    }
+
+    function updateBonusDisplay() {
+      const userData = getUserData();
+      if (userData && userData.referralCode) {
+        const referralCount = getReferralCount(userData.referralCode);
+        const bonusBNB = calculateBonusBNB(referralCount);
+        const totalStake = 50 + bonusBNB;
+        
+        document.getElementById('bonusAmount').textContent = '$' + bonusBNB;
+        document.getElementById('totalStake').textContent = '$' + totalStake;
+        document.getElementById('bonusDisplay').style.display = 'block';
+      }
+    }
+
+    // Load user data on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      const userData = getUserData();
+      
+      if (!userData || !userData.email) {
+        showNotification('Please complete email step first', 'error');
+        setTimeout(() => {
+          window.location.href = 'email.html';
+        }, 2000);
+        return;
+      }
+      
+      // Display user info
+      document.getElementById('userEmail').textContent = userData.email;
+      document.getElementById('userReferralCode').textContent = userData.referralCode;
+      document.getElementById('userInfo').style.display = 'block';
+      
+      // Update bonus display
+      updateBonusDisplay();
+      
+      // Pre-fill if already deposited
+      if (userData.depositAmount) {
+        document.getElementById('depositAmount').value = userData.depositAmount;
+      }
+      if (userData.txHash) {
+        document.getElementById('txHash').value = userData.txHash;
+      }
+    });
   </script>
 </body>
 </html>
