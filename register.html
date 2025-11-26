@@ -32,6 +32,13 @@
       <!-- STEP 1: EMAIL -->
       <div class="email-box" id="emailStep">
         <input type="email" id="email" placeholder="your@email.com" style="margin-bottom: 16px;">
+        
+        <div style="background: rgba(102, 126, 234, 0.05); padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 1px solid rgba(102, 126, 234, 0.2);">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: rgba(255, 255, 255, 0.9);">Have a Referral Code? (Optional)</label>
+          <input type="text" id="referralCodeInput" placeholder="HYBX123456" style="margin-bottom: 0; text-transform: uppercase;">
+          <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 8px;">Enter a friend's referral code to help them earn bonuses</p>
+        </div>
+        
         <button class="generate-btn" onclick="submitEmail()">Generate Referral Code →</button>
         <p style="font-size: 13px; color: rgba(255, 255, 255, 0.5); margin-top: 12px; text-align: center;">We'll never spam you — just updates & bonuses.</p>
       </div>
@@ -112,8 +119,16 @@
 
     // Check if user has existing progress
     window.addEventListener('DOMContentLoaded', function() {
-      const userData = getUserData();
-      if (userData) {
+      // Check for referral code in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref');
+      if (refCode) {
+        document.getElementById('referralCodeInput').value = refCode.toUpperCase();
+      }
+      
+      const userDataStr = localStorage.getItem('hybridx_user');
+      if (userDataStr) {
+        const userData = JSON.parse(userDataStr);
         if (userData.walletConnected) {
           window.location.href = 'success.html';
         } else if (userData.depositCompleted) {
@@ -152,9 +167,12 @@
         document.getElementById('step2Indicator').classList.add('active');
         
         // Display referral code
-        const userData = getUserData();
-        if (userData && userData.referralCode) {
-          document.getElementById('displayRefCode').textContent = userData.referralCode;
+        const userDataStr = localStorage.getItem('hybridx_user');
+        if (userDataStr) {
+          const userData = JSON.parse(userDataStr);
+          if (userData.referralCode) {
+            document.getElementById('displayRefCode').textContent = userData.referralCode;
+          }
         }
       } else if (step === 3) {
         document.getElementById('stepTag').textContent = 'STEP 3 OF 3';
@@ -164,9 +182,12 @@
         document.getElementById('step3Indicator').classList.add('active');
         
         // Display deposit amount
-        const userData = getUserData();
-        if (userData && userData.depositAmount) {
-          document.getElementById('displayDepositAmount').textContent = userData.depositAmount + ' BNB';
+        const userDataStr = localStorage.getItem('hybridx_user');
+        if (userDataStr) {
+          const userData = JSON.parse(userDataStr);
+          if (userData.depositAmount) {
+            document.getElementById('displayDepositAmount').textContent = userData.depositAmount + ' BNB';
+          }
         }
       }
       
@@ -176,25 +197,81 @@
 
     function submitEmail() {
       const email = document.getElementById('email').value.trim();
+      const referralCodeInput = document.getElementById('referralCodeInput').value.trim().toUpperCase();
       
-      if (!email || !isValidEmail(email)) {
-        showNotification('Please enter a valid email address', 'error');
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email address');
         return;
       }
       
-      const code = generateReferralCode(email);
-      storeUserData(email, code);
-      trackReferral(code);
+      // Generate referral code
+      const code = 'HYBX' + Math.random().toString(36).substr(2, 6).toUpperCase();
       
-      showNotification('Referral code generated: ' + code, 'success');
+      // Prepare user data
+      const userData = {
+        email: email,
+        referralCode: code,
+        timestamp: new Date().toISOString()
+      };
+      
+      // If user entered a referral code, save it
+      if (referralCodeInput) {
+        userData.usedReferralCode = referralCodeInput;
+        
+        // Track this referral (add to the referrer's count)
+        const referrals = JSON.parse(localStorage.getItem('hybridx_referrals') || '{}');
+        if (!referrals[referralCodeInput]) {
+          referrals[referralCodeInput] = [];
+        }
+        referrals[referralCodeInput].push({
+          email: email,
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('hybridx_referrals', JSON.stringify(referrals));
+        
+        alert('Success! Your referral code: ' + code + '\n\nYou used referral code: ' + referralCodeInput);
+      } else {
+        alert('Success! Your referral code: ' + code);
+      }
+      
+      // Store in localStorage
+      localStorage.setItem('hybridx_user', JSON.stringify(userData));
       
       setTimeout(() => {
         goToStep(2);
-      }, 1000);
+      }, 500);
     }
 
     function copyAddress() {
-      copyToClipboard(DEPOSIT_ADDRESS);
+      const address = DEPOSIT_ADDRESS;
+      
+      // Try modern clipboard API
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(address).then(() => {
+          alert('Address copied to clipboard!');
+        }).catch(() => {
+          // Fallback
+          fallbackCopy(address);
+        });
+      } else {
+        fallbackCopy(address);
+      }
+    }
+    
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        alert('Address copied to clipboard!');
+      } catch (err) {
+        alert('Failed to copy: ' + text);
+      }
+      document.body.removeChild(textArea);
     }
 
     function submitDeposit() {
@@ -202,64 +279,67 @@
       const txHash = document.getElementById('txHash').value.trim();
       
       if (!amount || amount < 2) {
-        showNotification('Minimum deposit is 2 BNB', 'error');
+        alert('Minimum deposit is 2 BNB');
         return;
       }
       
       if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
-        showNotification('Please enter a valid transaction hash', 'error');
+        alert('Please enter a valid transaction hash (must start with 0x and be 66 characters)');
         return;
       }
       
-      updateUserData({
-        depositAmount: amount,
-        txHash: txHash,
-        depositCompleted: true,
-        depositTimestamp: new Date().toISOString()
-      });
+      // Get existing data
+      const userData = JSON.parse(localStorage.getItem('hybridx_user') || '{}');
       
-      showNotification('Deposit confirmed!', 'success');
+      // Update with deposit info
+      userData.depositAmount = amount;
+      userData.txHash = txHash;
+      userData.depositCompleted = true;
+      userData.depositTimestamp = new Date().toISOString();
+      
+      localStorage.setItem('hybridx_user', JSON.stringify(userData));
+      
+      alert('Deposit confirmed!');
       
       setTimeout(() => {
         goToStep(3);
-      }, 1000);
+      }, 500);
     }
 
     function submitWallet() {
       const walletAddress = document.getElementById('walletAddress').value.trim();
       
       if (!walletAddress) {
-        showNotification('Please enter your wallet address', 'error');
+        alert('Please enter your wallet address');
         return;
       }
       
-      if (!isValidBSCAddress(walletAddress)) {
-        showNotification('Please enter a valid BSC wallet address', 'error');
+      if (!walletAddress.startsWith('0x') || walletAddress.length !== 42) {
+        alert('Please enter a valid BSC wallet address (must start with 0x and be 42 characters)');
         return;
       }
       
-      const userData = getUserData();
-      const referralCount = getReferralCount(userData.referralCode);
-      const bonusBNB = calculateBonusBNB(referralCount);
-      const totalStake = 50 + bonusBNB;
+      // Get existing data
+      const userData = JSON.parse(localStorage.getItem('hybridx_user') || '{}');
       
-      updateUserData({
-        walletAddress: walletAddress,
-        walletConnected: true,
-        registrationComplete: true,
-        completionTimestamp: new Date().toISOString()
-      });
+      // Update with wallet info
+      userData.walletAddress = walletAddress;
+      userData.walletConnected = true;
+      userData.registrationComplete = true;
+      userData.completionTimestamp = new Date().toISOString();
       
-      showNotification('Registration complete! Your $' + totalStake + ' BNB allocation is confirmed!', 'success');
+      localStorage.setItem('hybridx_user', JSON.stringify(userData));
+      
+      alert('Registration complete! Your $50 BNB allocation is confirmed!');
       
       setTimeout(() => {
         window.location.href = 'success.html';
-      }, 1500);
+      }, 1000);
     }
 
     async function useMetaMask() {
       if (typeof window.ethereum === 'undefined') {
-        showNotification('MetaMask is not installed. Please install MetaMask extension.', 'error');
+        alert('MetaMask is not installed. Please install MetaMask extension or enter your wallet address manually.');
         window.open('https://metamask.io/download/', '_blank');
         return;
       }
@@ -271,7 +351,7 @@
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         
         if (chainId !== '0x38') {
-          showNotification('Please switch to Binance Smart Chain network in MetaMask', 'error');
+          alert('Please switch to Binance Smart Chain network in MetaMask');
           return;
         }
         
@@ -280,7 +360,7 @@
         
       } catch (error) {
         console.error('MetaMask connection error:', error);
-        showNotification('Failed to connect MetaMask. Please try again.', 'error');
+        alert('Failed to connect MetaMask. Please try again or enter address manually.');
       }
     }
   </script>
