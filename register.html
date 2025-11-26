@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - HYBRIDX</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <img src="logo.png" alt="HYBRIDX" class="logo-img">
+      <div class="logo-text">HYBRIDX</div>
+    </div>
+    <a href="index.html" class="about-btn">← Back</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="tag" id="stepTag">STEP 1 OF 3</div>
+      <h1 id="stepTitle">Enter Your <span class="gradient-text">Email</span></h1>
+      <p class="hero-text" id="stepDesc">Get your exclusive referral code to share with friends and earn bonus BNB.</p>
+
+      <!-- Progress Steps -->
+      <div class="steps">
+        <div class="step active" id="step1Indicator"><span>1</span>Email</div>
+        <div class="step" id="step2Indicator"><span>2</span>Deposit</div>
+        <div class="step" id="step3Indicator"><span>3</span>Wallet</div>
+      </div>
+
+      <!-- STEP 1: EMAIL -->
+      <div class="email-box" id="emailStep">
+        <input type="email" id="email" placeholder="your@email.com" style="margin-bottom: 16px;">
+        <button class="generate-btn" onclick="submitEmail()">Generate Referral Code →</button>
+        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.5); margin-top: 12px; text-align: center;">We'll never spam you — just updates & bonuses.</p>
+      </div>
+
+      <!-- STEP 2: DEPOSIT -->
+      <div class="email-box" id="depositStep" style="display: none;">
+        <div style="background: rgba(234, 179, 8, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(234, 179, 8, 0.3);">
+          <p style="font-size: 13px; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+            ⚠️ <strong>Important:</strong> Only send BNB on BSC (BEP20) network. Wrong network = loss of funds.
+          </p>
+        </div>
+
+        <div style="background: rgba(102, 126, 234, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(102, 126, 234, 0.3);">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">✅ Your Referral Code:</p>
+          <p id="displayRefCode" style="font-size: 24px; font-weight: 700; color: #667eea; letter-spacing: 1px;"></p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">Deposit Address (BSC):</p>
+          <div style="background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 6px; word-break: break-all; font-family: monospace; font-size: 13px; margin-bottom: 12px;">
+            <p id="depositAddress">0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb5</p>
+          </div>
+          <button class="generate-btn" onclick="copyAddress()" style="background: rgba(102, 126, 234, 0.2); width: 100%; margin-bottom: 0;">
+            📋 Copy Address
+          </button>
+        </div>
+
+        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Deposit Amount (Minimum 2 BNB)</label>
+        <input type="number" id="depositAmount" placeholder="2.0000" min="2" step="0.0001" style="margin-bottom: 16px;">
+
+        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Transaction Hash</label>
+        <input type="text" id="txHash" placeholder="0x..." style="margin-bottom: 16px; font-family: monospace;">
+        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: -8px; margin-bottom: 16px;">Paste your transaction hash from BSCScan</p>
+
+        <button class="generate-btn" onclick="submitDeposit()">Continue to Wallet →</button>
+      </div>
+
+      <!-- STEP 3: WALLET -->
+      <div class="email-box" id="walletStep" style="display: none;">
+        <div style="background: rgba(234, 179, 8, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(234, 179, 8, 0.3);">
+          <p style="font-size: 13px; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+            ⚠️ <strong>Important:</strong> Make sure your wallet is set to Binance Smart Chain (BSC) network.
+          </p>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(16, 185, 129, 0.3);">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">✅ Deposit Confirmed:</p>
+          <p id="displayDepositAmount" style="font-size: 20px; font-weight: 700; color: #10b981;"></p>
+        </div>
+
+        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px;">Your BSC Wallet Address (That You Deposited From)</label>
+        <input type="text" id="walletAddress" placeholder="0x..." style="margin-bottom: 16px; font-family: monospace;">
+        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: -8px; margin-bottom: 20px;">Enter the same wallet address you used to send the BNB deposit</p>
+
+        <button class="generate-btn" onclick="submitWallet()" style="width: 100%; margin-bottom: 16px;">
+          Submit Wallet Address →
+        </button>
+
+        <div style="text-align: center; margin: 20px 0;">
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">— OR —</p>
+        </div>
+
+        <button class="generate-btn" onclick="useMetaMask()" style="width: 100%; background: rgba(255, 102, 0, 0.1); border: 1px solid rgba(255, 102, 0, 0.3); color: #ff6600;">
+          🦊 Connect with MetaMask
+        </button>
+      </div>
+    </section>
+
+    <footer>
+      <a href="https://x.com/HYBRIDX_HYBX" class="follow-btn">Follow X</a>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb5';
+    let currentStep = 1;
+
+    // Check if user has existing progress
+    window.addEventListener('DOMContentLoaded', function() {
+      const userData = getUserData();
+      if (userData) {
+        if (userData.walletConnected) {
+          window.location.href = 'success.html';
+        } else if (userData.depositCompleted) {
+          goToStep(3);
+        } else if (userData.referralCode) {
+          goToStep(2);
+        }
+      }
+    });
+
+    function goToStep(step) {
+      currentStep = step;
+      
+      // Hide all steps
+      document.getElementById('emailStep').style.display = 'none';
+      document.getElementById('depositStep').style.display = 'none';
+      document.getElementById('walletStep').style.display = 'none';
+      
+      // Remove active class from all step indicators
+      document.getElementById('step1Indicator').classList.remove('active');
+      document.getElementById('step2Indicator').classList.remove('active');
+      document.getElementById('step3Indicator').classList.remove('active');
+      
+      // Show current step
+      if (step === 1) {
+        document.getElementById('stepTag').textContent = 'STEP 1 OF 3';
+        document.getElementById('stepTitle').innerHTML = 'Enter Your <span class="gradient-text">Email</span>';
+        document.getElementById('stepDesc').textContent = 'Get your exclusive referral code to share with friends and earn bonus BNB.';
+        document.getElementById('emailStep').style.display = 'block';
+        document.getElementById('step1Indicator').classList.add('active');
+      } else if (step === 2) {
+        document.getElementById('stepTag').textContent = 'STEP 2 OF 3';
+        document.getElementById('stepTitle').innerHTML = 'Deposit <span class="gradient-text">$2 BNB</span>';
+        document.getElementById('stepDesc').textContent = 'Send minimum $2 BNB to secure your $50 BNB launchpool allocation.';
+        document.getElementById('depositStep').style.display = 'block';
+        document.getElementById('step2Indicator').classList.add('active');
+        
+        // Display referral code
+        const userData = getUserData();
+        if (userData && userData.referralCode) {
+          document.getElementById('displayRefCode').textContent = userData.referralCode;
+        }
+      } else if (step === 3) {
+        document.getElementById('stepTag').textContent = 'STEP 3 OF 3';
+        document.getElementById('stepTitle').innerHTML = 'Submit Your <span class="gradient-text">Wallet</span>';
+        document.getElementById('stepDesc').textContent = 'Enter the BSC wallet address you used to deposit from.';
+        document.getElementById('walletStep').style.display = 'block';
+        document.getElementById('step3Indicator').classList.add('active');
+        
+        // Display deposit amount
+        const userData = getUserData();
+        if (userData && userData.depositAmount) {
+          document.getElementById('displayDepositAmount').textContent = userData.depositAmount + ' BNB';
+        }
+      }
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function submitEmail() {
+      const email = document.getElementById('email').value.trim();
+      
+      if (!email || !isValidEmail(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return;
+      }
+      
+      const code = generateReferralCode(email);
+      storeUserData(email, code);
+      trackReferral(code);
+      
+      showNotification('Referral code generated: ' + code, 'success');
+      
+      setTimeout(() => {
+        goToStep(2);
+      }, 1000);
+    }
+
+    function copyAddress() {
+      copyToClipboard(DEPOSIT_ADDRESS);
+    }
+
+    function submitDeposit() {
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      const txHash = document.getElementById('txHash').value.trim();
+      
+      if (!amount || amount < 2) {
+        showNotification('Minimum deposit is 2 BNB', 'error');
+        return;
+      }
+      
+      if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
+        showNotification('Please enter a valid transaction hash', 'error');
+        return;
+      }
+      
+      updateUserData({
+        depositAmount: amount,
+        txHash: txHash,
+        depositCompleted: true,
+        depositTimestamp: new Date().toISOString()
+      });
+      
+      showNotification('Deposit confirmed!', 'success');
+      
+      setTimeout(() => {
+        goToStep(3);
+      }, 1000);
+    }
+
+    function submitWallet() {
+      const walletAddress = document.getElementById('walletAddress').value.trim();
+      
+      if (!walletAddress) {
+        showNotification('Please enter your wallet address', 'error');
+        return;
+      }
+      
+      if (!isValidBSCAddress(walletAddress)) {
+        showNotification('Please enter a valid BSC wallet address', 'error');
+        return;
+      }
+      
+      const userData = getUserData();
+      const referralCount = getReferralCount(userData.referralCode);
+      const bonusBNB = calculateBonusBNB(referralCount);
+      const totalStake = 50 + bonusBNB;
+      
+      updateUserData({
+        walletAddress: walletAddress,
+        walletConnected: true,
+        registrationComplete: true,
+        completionTimestamp: new Date().toISOString()
+      });
+      
+      showNotification('Registration complete! Your $' + totalStake + ' BNB allocation is confirmed!', 'success');
+      
+      setTimeout(() => {
+        window.location.href = 'success.html';
+      }, 1500);
+    }
+
+    async function useMetaMask() {
+      if (typeof window.ethereum === 'undefined') {
+        showNotification('MetaMask is not installed. Please install MetaMask extension.', 'error');
+        window.open('https://metamask.io/download/', '_blank');
+        return;
+      }
+      
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const walletAddress = accounts[0];
+        
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        
+        if (chainId !== '0x38') {
+          showNotification('Please switch to Binance Smart Chain network in MetaMask', 'error');
+          return;
+        }
+        
+        document.getElementById('walletAddress').value = walletAddress;
+        submitWallet();
+        
+      } catch (error) {
+        console.error('MetaMask connection error:', error);
+        showNotification('Failed to connect MetaMask. Please try again.', 'error');
+      }
+    }
+  </script>
+</body>
+</html>
