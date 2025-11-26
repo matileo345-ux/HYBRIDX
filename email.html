@@ -31,43 +31,62 @@
 
       <!-- Referral Code Display (hidden initially) -->
       <div id="referralDisplay" class="email-box" style="display: none; margin-top: 32px;">
-        <h2>🎉 Email Verified!</h2>
+        <h2>🎉 Your Referral Code</h2>
         <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Your Unique Referral Code:</p>
+          <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Your Unique Code:</p>
           <p id="referralCode" style="font-size: 32px; font-weight: 800; color: #667eea; letter-spacing: 2px; margin-bottom: 12px;"></p>
-          <p style="font-size: 13px; color: rgba(255, 255, 255, 0.5);">You'll get your referral link after completing all steps</p>
+          <button class="generate-btn" onclick="copyCode()" style="background: rgba(102, 126, 234, 0.2); margin-bottom: 16px;">
+            📋 Copy Code
+          </button>
         </div>
 
         <div style="text-align: left; margin-top: 24px; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 8px;">
-          <h3 style="margin-bottom: 16px; font-size: 18px;">✨ Next Steps</h3>
+          <h3 style="margin-bottom: 16px; font-size: 18px;">✨ What's Next?</h3>
           <ol style="color: rgba(255, 255, 255, 0.7); line-height: 2; padding-left: 20px;">
-            <li>Complete your BNB deposit</li>
-            <li>Connect your wallet</li>
-            <li>Get your referral link and start earning bonuses!</li>
+            <li>Share your referral code with friends</li>
+            <li>Each 10 referrals = +$5 BNB bonus for staking</li>
+            <li>Continue to deposit step below</li>
           </ol>
         </div>
 
-        <p style="margin-top: 20px; color: #10b981; font-weight: 600;">✅ Redirecting to deposit page...</p>
+        <button onclick="continueToDeposit()" class="generate-btn" style="margin-top: 24px; width: 100%; border: none; cursor: pointer;">
+          Continue to Deposit →
+        </button>
+      </div>
+
+      <!-- Referral Stats -->
+      <div id="referralStats" class="email-box" style="display: none; margin-top: 32px;">
+        <h2>📊 Your Referral Stats</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;">
+          <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 8px; text-align: center;">
+            <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Total Referrals</p>
+            <p id="totalReferrals" style="font-size: 28px; font-weight: 700; color: #667eea;">0</p>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 8px; text-align: center;">
+            <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Bonus BNB</p>
+            <p id="bonusBNB" style="font-size: 28px; font-weight: 700; color: #10b981;">$0</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="why-join">
-      <h2>Why Complete Your Registration?</h2>
+      <h2>How Referrals Work</h2>
       <div class="cards">
         <div class="card">
-          <div class="icon">💰</div>
-          <h3>$50 BNB Stake Allocation</h3>
-          <p>Deposit just $2 BNB to receive $50 BNB for launchpool staking</p>
+          <div class="icon">🔗</div>
+          <h3>Share Your Code</h3>
+          <p>Give your unique referral code to friends who want to join HYBRIDX</p>
         </div>
         <div class="card">
-          <div class="icon">🎁</div>
-          <h3>Referral Bonuses</h3>
-          <p>Share your link after registration. Every 10 referrals = +$5 BNB bonus</p>
+          <div class="icon">💰</div>
+          <h3>Earn Bonuses</h3>
+          <p>Every 10 successful referrals unlocks +$5 BNB for your launchpool stake</p>
         </div>
         <div class="card">
           <div class="icon">🚀</div>
-          <h3>Early Access</h3>
-          <p>Be among the first 10,000 to join the world's first hybrid launchpool</p>
+          <h3>Maximize Rewards</h3>
+          <p>More stake = more $HYBX tokens earned before DEX listing</p>
         </div>
       </div>
     </section>
@@ -107,20 +126,19 @@
       // Display referral code
       document.getElementById('referralCode').textContent = referralCode;
       document.getElementById('referralDisplay').style.display = 'block';
+      document.getElementById('referralStats').style.display = 'block';
+      
+      // Update stats
+      updateReferralStats(referralCode);
       
       // Hide error message
       errorMessage.style.display = 'none';
       
       // Show success notification
-      showNotification('Email verified! Redirecting to deposit...', 'success');
+      showNotification('Referral code generated successfully!', 'success');
       
       // Scroll to code display
       document.getElementById('referralDisplay').scrollIntoView({ behavior: 'smooth' });
-      
-      // Auto-redirect after 3 seconds
-      setTimeout(() => {
-        window.location.href = 'deposit.html';
-      }, 3000);
     }
     
     function continueToDeposit() {
@@ -132,22 +150,30 @@
       window.location.href = 'deposit.html';
     }
     
+    function copyCode() {
+      const code = document.getElementById('referralCode').textContent;
+      copyToClipboard(code);
+    }
+    
     function updateReferralStats(referralCode) {
       const count = getReferralCount(referralCode);
       const bonus = calculateBonusBNB(count);
       
       document.getElementById('totalReferrals').textContent = count;
-      document.getElementById('bonusBNB').textContent = '
+      document.getElementById('bonusBNB').textContent = '$' + bonus;
+    }
     
     // Check if user already has data
     window.addEventListener('DOMContentLoaded', function() {
       const userData = getUserData();
       if (userData && userData.email && userData.referralCode) {
         document.getElementById('emailInput').value = userData.email;
-        showNotification('You already have a referral code! Redirecting to deposit...', 'info');
-        setTimeout(() => {
-          window.location.href = 'deposit.html';
-        }, 2000);
+        document.getElementById('referralCode').textContent = userData.referralCode;
+        document.getElementById('referralDisplay').style.display = 'block';
+        document.getElementById('referralStats').style.display = 'block';
+        updateReferralStats(userData.referralCode);
       }
     });
   </script>
+</body>
+</html>
