@@ -404,6 +404,12 @@ footer {
   .partners-track {
     animation: scroll 20s linear infinite;
   }
+  
+  /* Tokenomics responsive */
+  section.why-join > div > div:first-child {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
 }
 
 /* PARTNERS SCROLL ANIMATION */
