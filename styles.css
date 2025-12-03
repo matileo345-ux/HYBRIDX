@@ -401,3 +401,69 @@ footer {
     padding: 24px;
   }
 }
+
+/* FLOATING CRYPTO ICONS */
+.floating-icons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.float-icon {
+  position: absolute;
+  font-size: 40px;
+  opacity: 0.15;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* PARTNERS SCROLL ANIMATION */
+.partners-scroll {
+  overflow: hidden;
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.partners-track {
+  display: flex;
+  gap: 40px;
+  animation: scroll 15s linear infinite;
+}
+
+.partner-item {
+  flex-shrink: 0;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.partners-track:hover {
+  animation-play-state: paused;
+}
