@@ -106,91 +106,131 @@
 
     <!-- TOKENOMICS -->
     <section class="why-join">
-      <h2 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px;">Tokenomics</h2>
-      <p style="font-size: 20px; color: rgba(255, 255, 255, 0.9); margin-bottom: 48px;">Total Supply: 1,000,000,000 $HYBX Tokens</p>
+      <h2>Tokenomics</h2>
+      <p style="font-size: 18px; color: rgba(255, 255, 255, 0.8); margin-bottom: 60px;">Total Supply: 1,000,000,000 $HYBX Tokens</p>
       
-      <div style="max-width: 900px; margin: 0 auto;">
-        <!-- Pie Chart Container -->
-        <div style="position: relative; width: 100%; max-width: 500px; margin: 0 auto 80px;">
-          <svg viewBox="0 0 200 200" style="width: 100%; height: auto; transform: rotate(-90deg); filter: drop-shadow(0 8px 24px rgba(102, 126, 234, 0.3));">
-            <!-- Launchpool Rewards 30% - Cyan -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#00D4FF" stroke-width="60" 
-                    stroke-dasharray="150.8 502.4" stroke-dashoffset="0"></circle>
-            <!-- Community 20% - Pink -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#FF6B9D" stroke-width="60" 
-                    stroke-dasharray="100.5 502.4" stroke-dashoffset="-150.8"></circle>
-            <!-- Liquidity Pool 20% - Purple -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#A855F7" stroke-width="60" 
-                    stroke-dasharray="100.5 502.4" stroke-dashoffset="-251.3"></circle>
-            <!-- Team & Development 15% - Green -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#10B981" stroke-width="60" 
-                    stroke-dasharray="75.4 502.4" stroke-dashoffset="-351.8"></circle>
-            <!-- Marketing 10% - Orange -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#F59E0B" stroke-width="60" 
-                    stroke-dasharray="50.2 502.4" stroke-dashoffset="-427.2"></circle>
-            <!-- IDO Allocations 5% - Red -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#EF4444" stroke-width="60" 
-                    stroke-dasharray="25.1 502.4" stroke-dashoffset="-477.4"></circle>
-            <!-- Center circle -->
-            <circle cx="100" cy="100" r="50" fill="#0a0a0f"></circle>
-          </svg>
+      <div style="max-width: 1000px; margin: 0 auto;">
+        <!-- Main Container -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 60px;">
           
-          <!-- Labels positioned around the chart -->
-          <div style="position: absolute; top: -10%; left: 50%; transform: translateX(-50%); text-align: center; width: 140px;">
-            <span style="color: #00D4FF; font-weight: 700; font-size: 14px; display: block;">Launchpool Rewards</span>
-            <span style="color: #00D4FF; font-weight: 700; font-size: 18px;">30%</span>
+          <!-- Pie Chart -->
+          <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+            <svg viewBox="0 0 200 200" style="width: 100%; height: auto; transform: rotate(-90deg);">
+              <!-- Launchpool 30% -->
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#00D4FF" stroke-width="40" 
+                      stroke-dasharray="131.95 439.82"></circle>
+              <!-- Community 20% -->
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#FF6B9D" stroke-width="40" 
+                      stroke-dasharray="87.96 439.82" stroke-dashoffset="-131.95"></circle>
+              <!-- Liquidity 20% -->
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#A855F7" stroke-width="40" 
+                      stroke-dasharray="87.96 439.82" stroke-dashoffset="-219.91"></circle>
+              <!-- Team 15% -->
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#10B981" stroke-width="40" 
+                      stroke-dasharray="65.97 439.82" stroke-dashoffset="-307.87"></circle>
+              <!-- Marketing 10% -->
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#F59E0B" stroke-width="40" 
+                      stroke-dasharray="43.98 439.82" stroke-dashoffset="-373.84"></circle>
+              <!-- IDO 5% -->
+              <circle cx="100" cy="100" r="70" fill="none" stroke="#667eea" stroke-width="40" 
+                      stroke-dasharray="21.99 439.82" stroke-dashoffset="-417.82"></circle>
+              <!-- Center -->
+              <circle cx="100" cy="100" r="50" fill="#0a0a0f"></circle>
+            </svg>
           </div>
           
-          <div style="position: absolute; top: 15%; right: -12%; text-align: left; width: 120px;">
-            <span style="color: #FF6B9D; font-weight: 700; font-size: 14px; display: block;">Community</span>
-            <span style="color: #FF6B9D; font-weight: 700; font-size: 18px;">20%</span>
-          </div>
-          
-          <div style="position: absolute; bottom: 20%; right: -15%; text-align: left; width: 120px;">
-            <span style="color: #A855F7; font-weight: 700; font-size: 14px; display: block;">Liquidity Pool</span>
-            <span style="color: #A855F7; font-weight: 700; font-size: 18px;">20%</span>
-          </div>
-          
-          <div style="position: absolute; bottom: -10%; right: 10%; text-align: right; width: 140px;">
-            <span style="color: #10B981; font-weight: 700; font-size: 14px; display: block;">Team & Dev</span>
-            <span style="color: #10B981; font-weight: 700; font-size: 18px;">15%</span>
-          </div>
-          
-          <div style="position: absolute; bottom: -10%; left: 10%; text-align: left; width: 120px;">
-            <span style="color: #F59E0B; font-weight: 700; font-size: 14px; display: block;">Marketing</span>
-            <span style="color: #F59E0B; font-weight: 700; font-size: 18px;">10%</span>
-          </div>
-          
-          <div style="position: absolute; bottom: 20%; left: -15%; text-align: right; width: 120px;">
-            <span style="color: #EF4444; font-weight: 700; font-size: 14px; display: block;">IDO</span>
-            <span style="color: #EF4444; font-weight: 700; font-size: 18px;">5%</span>
+          <!-- Legend -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 24px; height: 24px; background: #00D4FF; border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 16px;">Launchpool Rewards</span>
+                  <span style="font-weight: 700; font-size: 18px; color: #00D4FF;">30%</span>
+                </div>
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">300M tokens for staking rewards</p>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 24px; height: 24px; background: #FF6B9D; border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 16px;">Community</span>
+                  <span style="font-weight: 700; font-size: 18px; color: #FF6B9D;">20%</span>
+                </div>
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">200M tokens for community growth</p>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 24px; height: 24px; background: #A855F7; border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 16px;">Liquidity Pool</span>
+                  <span style="font-weight: 700; font-size: 18px; color: #A855F7;">20%</span>
+                </div>
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">200M tokens for DEX liquidity</p>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 24px; height: 24px; background: #10B981; border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 16px;">Team & Development</span>
+                  <span style="font-weight: 700; font-size: 18px; color: #10B981;">15%</span>
+                </div>
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">150M tokens vested </p>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 24px; height: 24px; background: #F59E0B; border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 16px;">Marketing</span>
+                  <span style="font-weight: 700; font-size: 18px; color: #F59E0B;">10%</span>
+                </div>
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">100M tokens for partnerships</p>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 24px; height: 24px; background: #667eea; border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 16px;">IDO Allocations</span>
+                  <span style="font-weight: 700; font-size: 18px; color: #667eea;">5%</span>
+                </div>
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">50M tokens for IDO participants</p>
+              </div>
+            </div>
           </div>
         </div>
         
         <!-- Verification Cards -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px;">
-          <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%); border: 2px solid #667eea; border-radius: 16px; padding: 32px; text-align: center; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);">
-              📊
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 32px; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#667eea'; this.style.background='rgba(102, 126, 234, 0.05)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)'">
+            <div style="width: 64px; height: 64px; background: rgba(102, 126, 234, 0.2); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 32px;">📊</span>
             </div>
-            <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.9);">supply on</p>
-            <p style="font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px;">CoinMarketCap</p>
-            <div style="display: inline-flex; align-items: center; gap: 8px; color: #667eea; font-weight: 600; cursor: pointer;">
-              <span style="font-size: 20px;">↗</span>
-              <span>View</span>
-            </div>
+            <p style="font-size: 14px; font-weight: 500; margin-bottom: 8px; color: rgba(255,255,255,0.7);"> </p>
+            <p style="font-size: 20px; font-weight: 700; color: #667eea; margin-bottom: 12px;">CoinMarketCap</p>
+            <a href="#" style="display: inline-flex; align-items: center; gap: 6px; color: #667eea; text-decoration: none; font-weight: 600; font-size: 14px;">
+              View <span style="font-size: 16px;">→</span>
+            </a>
           </div>
           
-          <div style="background: linear-gradient(135deg, rgba(139, 197, 63, 0.15) 0%, rgba(100, 160, 40, 0.15) 100%); border: 2px solid #8BC53F; border-radius: 16px; padding: 32px; text-align: center; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #8BC53F 0%, #64A028 100%); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 16px rgba(139, 197, 63, 0.4);">
-              🦎
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 32px; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#8BC53F'; this.style.background='rgba(139, 197, 63, 0.05)'" onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.03)'">
+            <div style="width: 64px; height: 64px; background: rgba(139, 197, 63, 0.2); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 32px;">🦎</span>
             </div>
-            <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.9);"> supply on</p>
-            <p style="font-size: 24px; font-weight: 700; color: #8BC53F; margin-bottom: 16px;">CoinGecko</p>
-            <div style="display: inline-flex; align-items: center; gap: 8px; color: #8BC53F; font-weight: 600; cursor: pointer;">
-              <span style="font-size: 20px;">↗</span>
-              <span>View</span>
-            </div>
+            <p style="font-size: 14px; font-weight: 500; margin-bottom: 8px; color: rgba(255,255,255,0.7);"> </p>
+            <p style="font-size: 20px; font-weight: 700; color: #8BC53F; margin-bottom: 12px;">CoinGecko</p>
+            <a href="#" style="display: inline-flex; align-items: center; gap: 6px; color: #8BC53F; text-decoration: none; font-weight: 600; font-size: 14px;">
+              View <span style="font-size: 16px;">→</span>
+            </a>
           </div>
         </div>
       </div>
