@@ -6,6 +6,12 @@
   <title>HYBRIDX – World's First Hybrid Launchpool</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ <!-- This magic line forces clean URLs and removes /index.html forever -->
+  <script>
+    if (window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html')) {
+      window.location.replace(window.location.origin + '/');
+    }
+  </script>
 </head>
 <body>
   <header>
