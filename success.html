@@ -145,7 +145,7 @@
       document.getElementById('referralCode').textContent = userData.referralCode;
       
       // Generate referral link
-      const baseUrl = window.location.origin + window.location.pathname.replace('success.html', 'register.html');
+      const baseUrl = window.location.origin + window.location.pathname.replace('/success', '/register');
       const referralLink = baseUrl + '?ref=' + userData.referralCode;
       document.getElementById('referralLink').value = referralLink;
       
