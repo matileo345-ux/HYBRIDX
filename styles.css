@@ -1,4 +1,4 @@
-* {
+ * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -176,9 +176,10 @@ h1 {
   margin: 48px auto;
   padding: 40px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.4);
   border-radius: 16px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
 }
 
 .email-box h2 {
@@ -250,15 +251,16 @@ h1 {
 .card {
   padding: 32px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.4);
   border-radius: 16px;
   transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
 }
 
 .card:hover {
   transform: translateY(-8px);
   border-color: #667eea;
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
 }
 
 .card .icon {
@@ -280,15 +282,17 @@ h1 {
 .feature-card {
   padding: 32px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.4);
   border-radius: 16px;
   margin-bottom: 24px;
   transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
 }
 
 .feature-card:hover {
   border-color: #667eea;
   background: rgba(102, 126, 234, 0.05);
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
 }
 
 .feature-card .icon {
