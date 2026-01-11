@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HYBRIDX – World's First Hybrid Launchpool</title>
+    <!-- Force redirect from index.html to root -->
+  <script>
+    if (window.location.pathname === '/index.html' || window.location.href.includes('index.html')) {
+      window.location.replace(window.location.origin + '/');
+    }
+  </script>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
