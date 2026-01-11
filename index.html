@@ -109,6 +109,115 @@
         right: -280px;
       }
     }
+
+    /* FAQ Section */
+    .faq-section {
+      max-width: 900px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .faq-section h2 {
+      font-size: 42px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .faq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      border-color: rgba(102, 126, 234, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      text-align: left;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .faq-question:hover {
+      color: #667eea;
+    }
+
+    .faq-icon {
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+      color: #667eea;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      padding: 0 28px;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 0 28px 24px;
+    }
+
+    .faq-answer p {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 16px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .faq-section h2 {
+        font-size: 32px;
+      }
+
+      .faq-question {
+        font-size: 16px;
+        padding: 20px 20px;
+      }
+
+      .faq-answer {
+        padding: 0 20px;
+      }
+
+      .faq-item.active .faq-answer {
+        padding: 0 20px 20px;
+      }
+
+      .faq-answer p {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -205,6 +314,132 @@
       <a href="register.html" class="join-btn">Join Waitlist NOW</a>
     </section>
 
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What is HYBRIDX?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain (BSC), combining staking with fair token distribution for early supporters.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>When does the main app launch?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>The main app launches in Q1 2026.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>When is the token DEX listing?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>The token DEX listing (on PancakeSwap) will take place after our first token launchpool ends.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I join the waitlist?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>Sign up with your email, copy our official BNB deposit address, send a minimum of $2 worth of BNB (BSC network), and submit your sending wallet address for verification.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is the $2 BNB deposit refundable?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>No — the deposit is a non-refundable contribution that directly supports project development and operations.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>When and how will I receive the $50 BNB reward?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>The $50 BNB reward will be automatically airdropped to verified wallets within 7 days after the main app launch in Q1 2026.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What happens if I refer people?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>For every 10 verified referrals (users who complete email signup + $2 BNB deposit + wallet submission), you earn an extra $5 BNB airdropped at launch (unlimited tiers).</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do you prevent bots or Sybil attacks?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>We require a real on-chain BNB deposit + wallet submission. All entries are manually and automatically verified for uniqueness.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is this safe and legitimate?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>Deposits use only the BSC network. Smart contracts will be audited before the main launch. Always use official links and verify addresses.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What if spots fill up before I join?</span>
+            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>Only the first 10,000 verified participants are eligible for the $50 BNB reward and priority launchpool access.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- BACKED BY SECTION -->
     <section style="padding: 60px 20px; text-align: center; background: rgba(255, 255, 255, 0.02); margin-top: 60px;">
       <p style="font-size: 12px; color: rgba(255, 255, 255, 0.4); margin-bottom: 32px; letter-spacing: 2px; text-transform: uppercase;">Backed By</p>
@@ -258,7 +493,7 @@
         <div style="margin-bottom: 60px;">
           <h3 style="font-size: 14px; color: rgba(255, 255, 255, 0.5); letter-spacing: 2px; margin-bottom: 32px;">RESOURCES</h3>
           <a href="litepaper.html" style="display: inline-block; padding: 16px 48px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(102, 126, 234, 0.4); border-radius: 12px; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(102, 126, 234, 0.2)'; this.style.borderColor='#667eea'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'; this.style.borderColor='rgba(102, 126, 234, 0.4)'">
-            litepaper
+            Whitepaper
           </a>
         </div>
 
@@ -342,6 +577,25 @@
       if (e.key === 'Escape' && slideMenu.classList.contains('active')) {
         toggleMenu();
       }
+    });
+
+    // FAQ Accordion Functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      
+      question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        
+        // Close all FAQ items
+        faqItems.forEach(faq => faq.classList.remove('active'));
+        
+        // Open clicked item if it wasn't active
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
     });
   </script>
 </body>
