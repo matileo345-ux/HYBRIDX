@@ -92,8 +92,9 @@
     .card-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 48px;
+      margin-bottom: 80px;
       perspective: 1000px;
+      position: relative;
     }
 
     .card {
@@ -133,6 +134,18 @@
     .card-logo {
       position: relative;
       z-index: 1;
+    }
+
+    .card-tagline {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.6);
+      white-space: nowrap;
+      letter-spacing: 0.5px;
     }
 
     .subtitle {
@@ -511,6 +524,10 @@
         width: 80px !important;
         height: 80px !important;
       }
+      .card-tagline {
+        font-size: 14px;
+        bottom: -50px;
+      }
       .subtitle {
         font-size: 22px;
       }
@@ -584,6 +601,7 @@
               </svg>
             </div>
           </div>
+          <div class="card-tagline">The Future of Hybrid Launchpool</div>
         </div>
 
         <h2 class="subtitle">
