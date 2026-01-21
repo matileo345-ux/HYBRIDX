@@ -1,703 +1,844 @@
-import React, { useState, useEffect } from 'react';
-import { ThirdwebProvider, ConnectWallet, useAddress, useSendTransaction, useChainId, useSwitchChain } from '@thirdweb-dev/react';
-import { BinanceSmartChainMainnet } from '@thirdweb-dev/chains';
-
-function WhitelistApp() {
-  const address = useAddress();
-  const chainId = useChainId();
-  const switchChain = useSwitchChain();
-  const { mutate: sendTransaction, isLoading, isSuccess, isError } = useSendTransaction();
-  const [isWhitelisted, setIsWhitelisted] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
-  const [faqOpen, setFaqOpen] = useState(null);
-  const [spotsRemaining] = useState(14237);
-
-  const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
-  const DEPOSIT_AMOUNT = '0.005';
-
-  useEffect(() => {
-    if (address) {
-      const whitelisted = localStorage.getItem(`whitelisted_${address}`);
-      setIsWhitelisted(whitelisted === 'true');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYBRIDX Whitelist - Join the Future of DeFi</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Thirdweb SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@thirdweb-dev/sdk@3/dist/browser.bundle.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-  }, [address]);
 
-  useEffect(() => {
-    if (isSuccess) {
-      setIsWhitelisted(true);
-      localStorage.setItem(`whitelisted_${address}`, 'true');
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #ffffff;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-  }, [isSuccess, address]);
 
-  const handleJoinWhitelist = async () => {
-    if (chainId !== 56) {
-      try {
-        await switchChain(56);
-      } catch (error) {
-        alert('Please switch to Binance Smart Chain');
-        return;
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo svg {
+      display: block;
+    }
+
+    .connect-btn {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid rgba(255, 107, 53, 0.5);
+      border-radius: 8px;
+      color: #FF6B35;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .connect-btn:hover {
+      background: rgba(255, 107, 53, 0.1);
+      border-color: #FF6B35;
+    }
+
+    /* Main */
+    main {
+      padding-top: 80px;
+      min-height: calc(100vh - 80px);
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      letter-spacing: 2px;
+    }
+
+    .card-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 48px;
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 240px;
+      height: 340px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:first-child {
+      margin-right: -40px;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2d1810 0%, #1a0f0a 100%);
+      border: 2px solid rgba(255, 107, 53, 0.3);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:nth-child(2) .card-inner {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+
+    .card-pattern {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 107, 53, 0.03) 10px, rgba(255, 107, 53, 0.03) 20px);
+    }
+
+    .card-logo {
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 40px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .highlight {
+      color: #FF6B35;
+      font-weight: 600;
+    }
+
+    .connect-prompt {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 24px;
+    }
+
+    .wallet-box {
+      margin-top: 24px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+
+    .wallet-address {
+      font-family: monospace;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 20px;
+    }
+
+    .main-button {
+      padding: 16px 48px;
+      background: transparent;
+      border: 2px solid #FF6B35;
+      border-radius: 8px;
+      color: #FF6B35;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .main-button:hover {
+      background: rgba(255, 107, 53, 0.1);
+    }
+
+    .main-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .spots-text {
+      margin-top: 16px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .status-box {
+      padding: 32px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      background: rgba(16, 185, 129, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #10b981;
+    }
+
+    .status-text {
+      font-size: 20px;
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 8px;
+    }
+
+    .status-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .message-box {
+      margin-top: 16px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .error-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .success-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    /* Info Section */
+    .info-section {
+      padding: 60px 24px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .info-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .info-card {
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .info-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #FF6B35;
+      margin-bottom: 8px;
+    }
+
+    .info-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Mobile Menu */
+    .menu-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1001;
+      width: 56px;
+      height: 56px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255, 107, 53, 0.1);
+    }
+
+    .hamburger {
+      width: 24px;
+      height: 18px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bar {
+      width: 100%;
+      height: 2px;
+      background: #FF6B35;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle.active .bar:nth-child(1) {
+      transform: rotate(45deg) translateY(8px);
+    }
+
+    .menu-toggle.active .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle.active .bar:nth-child(3) {
+      transform: rotate(-45deg) translateY(-8px);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      z-index: 1000;
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+      min-width: 180px;
+      display: none;
+    }
+
+    .mobile-menu.active {
+      display: block;
+    }
+
+    .menu-item {
+      width: 100%;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s ease;
+      border-radius: 6px;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 107, 53, 0.1);
+      color: #FF6B35;
+    }
+
+    /* Sections */
+    .section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 20px 24px;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .faq-icon {
+      font-size: 12px;
+      color: #FF6B35;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 24px;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding: 0 24px 20px;
+    }
+
+    .faq-answer p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 32px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .social-link {
+      font-size: 14px;
+      color: #FF6B35;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .social-link:hover {
+      opacity: 0.7;
+    }
+
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 107, 53, 0.3);
+      border-radius: 50%;
+      border-top-color: #FF6B35;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card {
+        width: 160px !important;
+        height: 240px !important;
+      }
+      .card-inner {
+        padding: 20px !important;
+      }
+      .card-logo {
+        width: 80px !important;
+        height: 80px !important;
+      }
+      .subtitle {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <path d="M8 16C8 16 12 8 20 8C28 8 32 16 32 16" stroke="url(#gradient1)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 24C32 24 28 32 20 32C12 32 8 24 8 24" stroke="url(#gradient2)" stroke-width="3" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="gradient1" x1="8" y1="8" x2="32" y2="16">
+              <stop stop-color="#FF6B35"/>
+              <stop offset="1" stop-color="#F7931E"/>
+            </linearGradient>
+            <linearGradient id="gradient2" x1="8" y1="24" x2="32" y2="32">
+              <stop stop-color="#F7931E"/>
+              <stop offset="1" stop-color="#FCBA04"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <button class="connect-btn" id="connectBtn">Connect Wallet</button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" id="menuToggle">
+    <div class="hamburger">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+  </button>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="menu-item" onclick="showSection('home')">Home</button>
+    <button class="menu-item" onclick="showSection('faq')">FAQ</button>
+    <button class="menu-item"><a href="https://x.com/HYBRIDX_HYBX" target="_blank" style="color: inherit; text-decoration: none;">Twitter</a></button>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Home Section -->
+    <section class="section active" id="home">
+      <div class="hero">
+        <h1 class="title">HYBRIDX</h1>
+        
+        <!-- Card Display -->
+        <div class="card-container">
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-pattern"></div>
+              <svg width="120" height="120" viewBox="0 0 120 120" class="card-logo">
+                <path d="M24 48C24 48 36 24 60 24C84 24 96 48 96 48" stroke="#FF6B35" stroke-width="6" stroke-linecap="round"/>
+                <path d="M96 72C96 72 84 96 60 96C36 96 24 72 24 72" stroke="#FCBA04" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-pattern"></div>
+              <svg width="120" height="120" viewBox="0 0 120 120" class="card-logo">
+                <path d="M24 48C24 48 36 24 60 24C84 24 96 48 96 48" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+                <path d="M96 72C96 72 84 96 60 96C36 96 24 72 24 72" stroke="#cccccc" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="subtitle">
+          #beyourownVC and join the<br/>
+          <span class="highlight">HYBRIDX Whitelist</span>
+        </h2>
+
+        <!-- Wallet Connection Area -->
+        <div id="walletArea">
+          <p class="connect-prompt">Connect your wallet to join the whitelist</p>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section">
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-number">$2M</div>
+            <div class="info-label">Total Airdrop Pool</div>
+          </div>
+          <div class="info-card">
+            <div class="info-number">20,000</div>
+            <div class="info-label">Whitelist Spots</div>
+          </div>
+          <div class="info-card">
+            <div class="info-number">Q1 2026</div>
+            <div class="info-label">Launch Date</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What is HYBRIDX?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain, combining launchpad and launchpool mechanics for fair token distribution.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>How much do I need to deposit?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Just 0.005 BNB (≈$2-$3) to secure your whitelist spot and eligibility for the $1M BNB + $1M HYBRIDX airdrop.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>When is the main app launch?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Q1 2026. The main app will include the launchpool where you can stake BNB to earn HYBRIDX tokens.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>How is the $1M airdrop distributed?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Pro-rata distribution among all 20,000 whitelisted participants. Early participants get priority allocation.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Is this safe?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>100% on-chain and transparent. Your deposit goes directly to our verified BSC address. Smart contracts will be audited before launch.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p class="footer-text">© 2026 HYBRIDX. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="social-link">Twitter</a>
+        <a href="#" class="social-link">Telegram</a>
+        <a href="#" class="social-link">Discord</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+    const DEPOSIT_AMOUNT = '0.005';
+    let provider = null;
+    let signer = null;
+    let userAddress = null;
+
+    // Menu Toggle
+    document.getElementById('menuToggle').addEventListener('click', function() {
+      this.classList.toggle('active');
+      document.getElementById('mobileMenu').classList.toggle('active');
+    });
+
+    // Section Navigation
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      document.getElementById('mobileMenu').classList.remove('active');
+      document.getElementById('menuToggle').classList.remove('active');
+    }
+
+    // FAQ Toggle
+    function toggleFaq(button) {
+      const item = button.parentElement;
+      const wasActive = item.classList.contains('active');
+      
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      
+      if (!wasActive) {
+        item.classList.add('active');
       }
     }
 
-    const tx = {
-      to: DEPOSIT_ADDRESS,
-      value: DEPOSIT_AMOUNT,
-    };
+    // Connect Wallet
+    document.getElementById('connectBtn').addEventListener('click', connectWallet);
 
-    sendTransaction(tx);
-  };
-
-  const faqs = [
-    { q: "What is HYBRIDX?", a: "HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain, combining launchpad and launchpool mechanics for fair token distribution." },
-    { q: "How much do I need to deposit?", a: "Just 0.005 BNB (≈$2-$3) to secure your whitelist spot and eligibility for the $1M BNB + $1M HYBRIDX airdrop." },
-    { q: "When is the main app launch?", a: "Q1 2026. The main app will include the launchpool where you can stake BNB to earn HYBRIDX tokens." },
-    { q: "How is the $1M airdrop distributed?", a: "Pro-rata distribution among all 20,000 whitelisted participants. Early participants get priority allocation." },
-    { q: "Is this safe?", a: "100% on-chain and transparent. Your deposit goes directly to our verified BSC address. Smart contracts will be audited before launch." },
-  ];
-
-  return (
-    <div style={styles.app}>
-      {/* Header */}
-      <header style={styles.header}>
-        <div style={styles.headerContent}>
-          <div style={styles.logo}>
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <path d="M8 16C8 16 12 8 20 8C28 8 32 16 32 16" stroke="url(#gradient1)" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M32 24C32 24 28 32 20 32C12 32 8 24 8 24" stroke="url(#gradient2)" strokeWidth="3" strokeLinecap="round"/>
-              <defs>
-                <linearGradient id="gradient1" x1="8" y1="8" x2="32" y2="16">
-                  <stop stopColor="#FF6B35"/>
-                  <stop offset="1" stopColor="#F7931E"/>
-                </linearGradient>
-                <linearGradient id="gradient2" x1="8" y1="24" x2="32" y2="32">
-                  <stop stopColor="#F7931E"/>
-                  <stop offset="1" stopColor="#FCBA04"/>
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          <ConnectWallet 
-            theme="dark"
-            btnTitle="Connect"
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(255, 107, 53, 0.5)',
-              borderRadius: '8px',
-              color: '#FF6B35',
-              fontSize: '14px',
-              fontWeight: '500',
-              padding: '10px 24px',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          />
-        </div>
-      </header>
-
-      {/* Mobile Menu */}
-      <button style={styles.menuToggle} onClick={() => setMenuOpen(!menuOpen)}>
-        <div style={styles.hamburger}>
-          <span style={{...styles.bar, transform: menuOpen ? 'rotate(45deg) translateY(8px)' : 'none'}}></span>
-          <span style={{...styles.bar, opacity: menuOpen ? 0 : 1}}></span>
-          <span style={{...styles.bar, transform: menuOpen ? 'rotate(-45deg) translateY(-8px)' : 'none'}}></span>
-        </div>
-      </button>
-
-      {menuOpen && (
-        <div style={styles.mobileMenu}>
-          <button style={styles.menuItem} onClick={() => { setActiveSection('home'); setMenuOpen(false); }}>Home</button>
-          <button style={styles.menuItem} onClick={() => { setActiveSection('about'); setMenuOpen(false); }}>About</button>
-          <button style={styles.menuItem} onClick={() => { setActiveSection('benefits'); setMenuOpen(false); }}>Benefits</button>
-          <button style={styles.menuItem} onClick={() => { setActiveSection('faq'); setMenuOpen(false); }}>FAQ</button>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <main style={styles.main}>
-        {activeSection === 'home' && (
-          <>
-            {/* Hero Section */}
-            <section style={styles.hero}>
-              <div style={styles.heroContent}>
-                <h1 style={styles.title}>HYBRIDX</h1>
-                
-                {/* Card Display */}
-                <div style={styles.cardContainer}>
-                  <div style={styles.card}>
-                    <div style={styles.cardInner}>
-                      <div style={styles.cardPattern}></div>
-                      <svg width="120" height="120" viewBox="0 0 120 120" style={styles.cardLogo}>
-                        <path d="M24 48C24 48 36 24 60 24C84 24 96 48 96 48" stroke="#FF6B35" strokeWidth="6" strokeLinecap="round"/>
-                        <path d="M96 72C96 72 84 96 60 96C36 96 24 72 24 72" stroke="#FCBA04" strokeWidth="6" strokeLinecap="round"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div style={{...styles.card, marginLeft: '-40px'}}>
-                    <div style={{...styles.cardInner, background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'}}>
-                      <div style={styles.cardPattern}></div>
-                      <svg width="120" height="120" viewBox="0 0 120 120" style={styles.cardLogo}>
-                        <path d="M24 48C24 48 36 24 60 24C84 24 96 48 96 48" stroke="#ffffff" strokeWidth="6" strokeLinecap="round"/>
-                        <path d="M96 72C96 72 84 96 60 96C36 96 24 72 24 72" stroke="#cccccc" strokeWidth="6" strokeLinecap="round"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                <h2 style={styles.subtitle}>
-                  #beyourownVC and join the<br/>
-                  <span style={styles.highlight}>HYBRIDX Whitelist</span>
-                </h2>
-
-                {!address ? (
-                  <p style={styles.connectPrompt}>Connect your wallet to join</p>
-                ) : isWhitelisted ? (
-                  <div style={styles.statusBox}>
-                    <div style={styles.successIcon}>✓</div>
-                    <p style={styles.statusText}>You're whitelisted!</p>
-                    <p style={styles.statusSubtext}>Eligible for $1M BNB + $1M HYBRIDX airdrop</p>
-                  </div>
-                ) : (
-                  <>
-                    <button 
-                      style={styles.mainButton}
-                      onClick={handleJoinWhitelist}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Processing...' : 'Join Whitelist (0.005 BNB)'}
-                    </button>
-                    <p style={styles.spotsText}>{(20000 - spotsRemaining).toLocaleString()} / 20,000 spots claimed</p>
-                  </>
-                )}
-
-                {isError && (
-                  <div style={styles.errorBox}>
-                    Transaction failed. Please try again.
-                  </div>
-                )}
-              </div>
-            </section>
-
-            {/* Quick Info */}
-            <section style={styles.infoSection}>
-              <div style={styles.infoGrid}>
-                <div style={styles.infoCard}>
-                  <div style={styles.infoNumber}>$2M</div>
-                  <div style={styles.infoLabel}>Total Airdrop Pool</div>
-                </div>
-                <div style={styles.infoCard}>
-                  <div style={styles.infoNumber}>20,000</div>
-                  <div style={styles.infoLabel}>Whitelist Spots</div>
-                </div>
-                <div style={styles.infoCard}>
-                  <div style={styles.infoNumber}>Q1 2026</div>
-                  <div style={styles.infoLabel}>Launch Date</div>
-                </div>
-              </div>
-            </section>
-          </>
-        )}
-
-        {activeSection === 'about' && (
-          <section style={styles.section}>
-            <h2 style={styles.sectionTitle}>About HYBRIDX</h2>
-            <div style={styles.aboutContent}>
-              <p style={styles.aboutText}>
-                HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain (BSC), 
-                revolutionizing how communities participate in token launches.
-              </p>
-              <div style={styles.featureList}>
-                <div style={styles.feature}>
-                  <span style={styles.featureIcon}>⚡</span>
-                  <span style={styles.featureText}>Hybrid launchpad + launchpool mechanics</span>
-                </div>
-                <div style={styles.feature}>
-                  <span style={styles.featureIcon}>💎</span>
-                  <span style={styles.featureText}>Fair distribution - no VC dumping</span>
-                </div>
-                <div style={styles.feature}>
-                  <span style={styles.featureIcon}>🚀</span>
-                  <span style={styles.featureText}>Stake BNB to earn HYBRIDX tokens</span>
-                </div>
-                <div style={styles.feature}>
-                  <span style={styles.featureIcon}>🎯</span>
-                  <span style={styles.featureText}>Community-first approach</span>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activeSection === 'benefits' && (
-          <section style={styles.section}>
-            <h2 style={styles.sectionTitle}>Whitelist Benefits</h2>
-            <div style={styles.benefitsList}>
-              <div style={styles.benefitItem}>
-                <h3 style={styles.benefitTitle}>Priority Access</h3>
-                <p style={styles.benefitDesc}>Be among the first to stake in the Q1 2026 launchpool with enhanced multipliers</p>
-              </div>
-              <div style={styles.benefitItem}>
-                <h3 style={styles.benefitTitle}>Massive Airdrop</h3>
-                <p style={styles.benefitDesc}>Share of $1M BNB + $1M HYBRIDX distributed pro-rata to all whitelisted wallets</p>
-              </div>
-              <div style={styles.benefitItem}>
-                <h3 style={styles.benefitTitle}>Fair Launch</h3>
-                <p style={styles.benefitDesc}>No VC dumping, no presale. Pure community-driven with equal opportunity for all</p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activeSection === 'faq' && (
-          <section style={styles.section}>
-            <h2 style={styles.sectionTitle}>FAQ</h2>
-            <div style={styles.faqList}>
-              {faqs.map((faq, i) => (
-                <div key={i} style={styles.faqItem}>
-                  <button 
-                    style={styles.faqQuestion}
-                    onClick={() => setFaqOpen(faqOpen === i ? null : i)}
-                  >
-                    <span>{faq.q}</span>
-                    <span style={{...styles.faqIcon, transform: faqOpen === i ? 'rotate(180deg)' : 'none'}}>▼</span>
-                  </button>
-                  {faqOpen === i && (
-                    <div style={styles.faqAnswer}>
-                      <p>{faq.a}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer style={styles.footer}>
-        <div style={styles.footerContent}>
-          <p style={styles.footerText}>© 2026 HYBRIDX. All rights reserved.</p>
-          <div style={styles.socialLinks}>
-            <a href="https://x.com/HYBRIDX_HYBX" target="_blank" style={styles.socialLink}>Twitter</a>
-            <a href="#" style={styles.socialLink}>Telegram</a>
-            <a href="#" style={styles.socialLink}>Discord</a>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-const styles = {
-  app: {
-    minHeight: '100vh',
-    background: '#0a0a0a',
-    color: '#ffffff',
-    fontFamily: 'Inter, sans-serif',
-  },
-  header: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1000,
-    background: 'rgba(10, 10, 10, 0.95)',
-    backdropFilter: 'blur(10px)',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-  },
-  headerContent: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '20px 24px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  logo: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  menuToggle: {
-    position: 'fixed',
-    bottom: '24px',
-    right: '24px',
-    zIndex: 1001,
-    width: '56px',
-    height: '56px',
-    background: '#1a1a1a',
-    border: '1px solid rgba(255, 107, 53, 0.3)',
-    borderRadius: '12px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.3s ease',
-  },
-  hamburger: {
-    width: '24px',
-    height: '18px',
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  bar: {
-    width: '100%',
-    height: '2px',
-    background: '#FF6B35',
-    transition: 'all 0.3s ease',
-  },
-  mobileMenu: {
-    position: 'fixed',
-    bottom: '90px',
-    right: '24px',
-    zIndex: 1000,
-    background: '#1a1a1a',
-    border: '1px solid rgba(255, 107, 53, 0.3)',
-    borderRadius: '12px',
-    padding: '12px',
-    minWidth: '180px',
-  },
-  menuItem: {
-    width: '100%',
-    padding: '12px 16px',
-    background: 'transparent',
-    border: 'none',
-    color: '#ffffff',
-    textAlign: 'left',
-    cursor: 'pointer',
-    fontSize: '14px',
-    transition: 'all 0.2s ease',
-    borderRadius: '6px',
-  },
-  main: {
-    paddingTop: '80px',
-    minHeight: 'calc(100vh - 80px)',
-  },
-  hero: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '80px 24px 60px',
-    textAlign: 'center',
-  },
-  heroContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: '700',
-    marginBottom: '48px',
-    letterSpacing: '2px',
-  },
-  cardContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: '48px',
-    perspective: '1000px',
-  },
-  card: {
-    width: '240px',
-    height: '340px',
-    transition: 'transform 0.3s ease',
-  },
-  cardInner: {
-    width: '100%',
-    height: '100%',
-    background: 'linear-gradient(135deg, #2d1810 0%, #1a0f0a 100%)',
-    border: '2px solid rgba(255, 107, 53, 0.3)',
-    borderRadius: '16px',
-    padding: '32px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  cardPattern: {
-    position: 'absolute',
-    inset: 0,
-    background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 107, 53, 0.03) 10px, rgba(255, 107, 53, 0.03) 20px)',
-  },
-  cardLogo: {
-    position: 'relative',
-    zIndex: 1,
-  },
-  subtitle: {
-    fontSize: '28px',
-    fontWeight: '400',
-    lineHeight: '1.5',
-    marginBottom: '40px',
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  highlight: {
-    color: '#FF6B35',
-    fontWeight: '600',
-  },
-  connectPrompt: {
-    fontSize: '16px',
-    color: 'rgba(255, 255, 255, 0.6)',
-    marginTop: '24px',
-  },
-  mainButton: {
-    padding: '16px 48px',
-    background: 'transparent',
-    border: '2px solid #FF6B35',
-    borderRadius: '8px',
-    color: '#FF6B35',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    fontFamily: 'Inter, sans-serif',
-  },
-  spotsText: {
-    marginTop: '16px',
-    fontSize: '14px',
-    color: 'rgba(255, 255, 255, 0.5)',
-  },
-  statusBox: {
-    padding: '32px',
-    background: 'rgba(16, 185, 129, 0.1)',
-    border: '1px solid rgba(16, 185, 129, 0.3)',
-    borderRadius: '12px',
-    textAlign: 'center',
-  },
-  successIcon: {
-    width: '48px',
-    height: '48px',
-    margin: '0 auto 16px',
-    background: 'rgba(16, 185, 129, 0.2)',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '24px',
-    color: '#10b981',
-  },
-  statusText: {
-    fontSize: '20px',
-    fontWeight: '600',
-    color: '#10b981',
-    marginBottom: '8px',
-  },
-  statusSubtext: {
-    fontSize: '14px',
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
-  errorBox: {
-    marginTop: '16px',
-    padding: '12px 24px',
-    background: 'rgba(239, 68, 68, 0.1)',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
-    borderRadius: '8px',
-    color: '#ef4444',
-    fontSize: '14px',
-  },
-  infoSection: {
-    padding: '60px 24px',
-    background: 'rgba(255, 255, 255, 0.02)',
-  },
-  infoGrid: {
-    maxWidth: '900px',
-    margin: '0 auto',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '24px',
-  },
-  infoCard: {
-    padding: '32px',
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
-    borderRadius: '12px',
-    textAlign: 'center',
-  },
-  infoNumber: {
-    fontSize: '32px',
-    fontWeight: '700',
-    color: '#FF6B35',
-    marginBottom: '8px',
-  },
-  infoLabel: {
-    fontSize: '14px',
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
-  section: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '80px 24px',
-  },
-  sectionTitle: {
-    fontSize: '32px',
-    fontWeight: '700',
-    marginBottom: '48px',
-    textAlign: 'center',
-  },
-  aboutContent: {
-    padding: '40px',
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
-    borderRadius: '16px',
-  },
-  aboutText: {
-    fontSize: '18px',
-    lineHeight: '1.8',
-    color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: '32px',
-  },
-  featureList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  feature: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-  },
-  featureIcon: {
-    fontSize: '24px',
-  },
-  featureText: {
-    fontSize: '16px',
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
-  benefitsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-  },
-  benefitItem: {
-    padding: '32px',
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
-    borderRadius: '12px',
-  },
-  benefitTitle: {
-    fontSize: '20px',
-    fontWeight: '600',
-    color: '#FF6B35',
-    marginBottom: '12px',
-  },
-  benefitDesc: {
-    fontSize: '16px',
-    lineHeight: '1.7',
-    color: 'rgba(255, 255, 255, 0.7)',
-  },
-  faqList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-  },
-  faqItem: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.05)',
-    borderRadius: '12px',
-    overflow: 'hidden',
-  },
-  faqQuestion: {
-    width: '100%',
-    padding: '20px 24px',
-    background: 'transparent',
-    border: 'none',
-    color: '#ffffff',
-    fontSize: '16px',
-    fontWeight: '500',
-    textAlign: 'left',
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontFamily: 'Inter, sans-serif',
-  },
-  faqIcon: {
-    fontSize: '12px',
-    color: '#FF6B35',
-    transition: 'transform 0.3s ease',
-  },
-  faqAnswer: {
-    padding: '0 24px 20px',
-    fontSize: '15px',
-    lineHeight: '1.7',
-    color: 'rgba(255, 255, 255, 0.7)',
-  },
-  footer: {
-    borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-    padding: '32px 24px',
-  },
-  footerContent: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: '16px',
-  },
-  footerText: {
-    fontSize: '14px',
-    color: 'rgba(255, 255, 255, 0.4)',
-  },
-  socialLinks: {
-    display: 'flex',
-    gap: '24px',
-  },
-  socialLink: {
-    fontSize: '14px',
-    color: '#FF6B35',
-    textDecoration: 'none',
-    transition: 'opacity 0.2s ease',
-  },
-};
-
-export default function App() {
-  return (
-    <ThirdwebProvider
-      activeChain={BinanceSmartChainMainnet}
-      clientId="YOUR_THIRDWEB_CLIENT_ID"
-      supportedChains={[BinanceSmartChainMainnet]}
-    >
-      <style>
-        {`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          userAddress = accounts[0];
           
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+          // Check network
+          const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+          if (chainId !== '0x38') {
+            try {
+              await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x38' }],
+              });
+            } catch (switchError) {
+              if (switchError.code === 4902) {
+                await window.ethereum.request({
+                  method: 'wallet_addEthereumChain',
+                  params: [{
+                    chainId: '0x38',
+                    chainName: 'Binance Smart Chain',
+                    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                    blockExplorerUrls: ['https://bscscan.com/']
+                  }],
+                });
+              }
+            }
           }
           
-          body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-          }
+          updateWalletUI();
+        } catch (error) {
+          console.error('Error connecting wallet:', error);
+          alert('Failed to connect wallet. Please try again.');
+        }
+      } else {
+        alert('Please install MetaMask or another Web3 wallet!');
+      }
+    }
 
-          button:hover {
-            opacity: 0.8;
-          }
+    function updateWalletUI() {
+      const isWhitelisted = localStorage.getItem(`whitelisted_${userAddress}`) === 'true';
+      const walletArea = document.getElementById('walletArea');
+      
+      if (isWhitelisted) {
+        walletArea.innerHTML = `
+          <div class="status-box">
+            <div class="success-icon">✓</div>
+            <p class="status-text">You're whitelisted!</p>
+            <p class="status-subtext">Eligible for $1M BNB + $1M HYBRIDX airdrop</p>
+          </div>
+        `;
+      } else {
+        walletArea.innerHTML = `
+          <div class="wallet-box">
+            <div class="wallet-address">${userAddress.slice(0, 6)}...${userAddress.slice(-4)}</div>
+            <button class="main-button" id="joinBtn">Join Whitelist (0.005 BNB)</button>
+            <p class="spots-text">14,237 / 20,000 spots claimed</p>
+          </div>
+        `;
+        
+        document.getElementById('joinBtn').addEventListener('click', joinWhitelist);
+      }
+    }
 
-          .menuItem:hover {
-            background: rgba(255, 107, 53, 0.1) !important;
-            color: #FF6B35 !important;
-          }
+    async function joinWhitelist() {
+      const btn = document.getElementById('joinBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span> Processing...';
+      
+      try {
+        const transactionParameters = {
+          to: DEPOSIT_ADDRESS,
+          from: userAddress,
+          value: '0x' + (parseFloat(DEPOSIT_AMOUNT) * 1e18).toString(16),
+        };
 
-          @media (max-width: 768px) {
-            .card {
-              width: 160px !important;
-              height: 240px !important;
-            }
-            .cardInner {
-              padding: 20px !important;
-            }
-            .cardLogo {
-              width: 80px !important;
-              height: 80px !important;
-            }
-          }
-        `}
-      </style>
-      <WhitelistApp />
-    </ThirdwebProvider>
-  );
-}
+        const txHash = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [transactionParameters],
+        });
+
+        // Wait for confirmation
+        setTimeout(() => {
+          localStorage.setItem(`whitelisted_${userAddress}`, 'true');
+          const walletArea = document.getElementById('walletArea');
+          walletArea.innerHTML = `
+            <div class="status-box">
+              <div class="success-icon">✓</div>
+              <p class="status-text">You're whitelisted!</p>
+              <p class="status-subtext">Eligible for $1M BNB + $1M HYBRIDX airdrop</p>
+            </div>
+            <div class="message-box success-box">
+              🎉 Success! Transaction confirmed. See you in Q1 2026!
+            </div>
+          `;
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Transaction error:', error);
+        btn.disabled = false;
+        btn.textContent = 'Join Whitelist (0.005 BNB)';
+        
+        const walletArea = document.getElementById('walletArea');
+        walletArea.innerHTML += `
+          <div class="message-box error-box">
+            Transaction failed. Please try again.
+          </div>
+        `;
+      }
+    }
+
+    // Auto-connect if previously connected
+    window.addEventListener('load', async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          userAddress = accounts[0];
+          updateWalletUI();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
