@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { ThirdwebProvider, ConnectWallet, useAddress, useSendTransaction, useChainId, useSwitchChain } from '@thirdweb-dev/react';
 import { BinanceSmartChainMainnet } from '@thirdweb-dev/chains';
 
-// Main App Component
 function WhitelistApp() {
   const address = useAddress();
   const chainId = useChainId();
   const switchChain = useSwitchChain();
   const { mutate: sendTransaction, isLoading, isSuccess, isError } = useSendTransaction();
   const [isWhitelisted, setIsWhitelisted] = useState(false);
-  const [spotsRemaining, setSpotsRemaining] = useState(14237);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const [faqOpen, setFaqOpen] = useState(null);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [spotsRemaining] = useState(14237);
 
   const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
   const DEPOSIT_AMOUNT = '0.005';
@@ -24,14 +24,11 @@ function WhitelistApp() {
   }, [address]);
 
   useEffect(() => {
-    if (isSuccess && !showSuccess) {
+    if (isSuccess) {
       setIsWhitelisted(true);
       localStorage.setItem(`whitelisted_${address}`, 'true');
-      setShowSuccess(true);
-      setSpotsRemaining(prev => Math.max(0, prev - 1));
-      setTimeout(() => setShowSuccess(false), 5000);
     }
-  }, [isSuccess, address, showSuccess]);
+  }, [isSuccess, address]);
 
   const handleJoinWhitelist = async () => {
     if (chainId !== 56) {
@@ -52,280 +49,237 @@ function WhitelistApp() {
   };
 
   const faqs = [
-    {
-      q: "What is HYBRIDX?",
-      a: "HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain, combining launchpad and launchpool mechanics for fair token distribution."
-    },
-    {
-      q: "How much do I need to deposit?",
-      a: "Just 0.005 BNB (≈$2-$3) to secure your whitelist spot and eligibility for the $1M BNB + $1M HYBRIDX airdrop."
-    },
-    {
-      q: "When is the main app launch?",
-      a: "Q1 2026. The main app will include the launchpool where you can stake BNB to earn HYBRIDX tokens."
-    },
-    {
-      q: "How is the $1M airdrop distributed?",
-      a: "Pro-rata distribution among all 20,000 whitelisted participants. Early participants get priority allocation."
-    },
-    {
-      q: "Is this safe?",
-      a: "100% on-chain and transparent. Your deposit goes directly to our verified BSC address. Smart contracts will be audited before launch."
-    },
-    {
-      q: "What happens after I join the whitelist?",
-      a: "You'll receive priority access to the Q1 2026 launchpool and be eligible for the massive $1M BNB + $1M HYBRIDX airdrop."
-    }
+    { q: "What is HYBRIDX?", a: "HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain, combining launchpad and launchpool mechanics for fair token distribution." },
+    { q: "How much do I need to deposit?", a: "Just 0.005 BNB (≈$2-$3) to secure your whitelist spot and eligibility for the $1M BNB + $1M HYBRIDX airdrop." },
+    { q: "When is the main app launch?", a: "Q1 2026. The main app will include the launchpool where you can stake BNB to earn HYBRIDX tokens." },
+    { q: "How is the $1M airdrop distributed?", a: "Pro-rata distribution among all 20,000 whitelisted participants. Early participants get priority allocation." },
+    { q: "Is this safe?", a: "100% on-chain and transparent. Your deposit goes directly to our verified BSC address. Smart contracts will be audited before launch." },
   ];
 
   return (
     <div style={styles.app}>
-      {/* Particle Background */}
-      <div style={styles.particles}></div>
-
       {/* Header */}
       <header style={styles.header}>
-        <div style={styles.container}>
-          <div style={styles.headerContent}>
-            <div style={styles.logo}>⚡ HYBRIDX</div>
-            <ConnectWallet 
-              theme="dark"
-              btnTitle="Connect Wallet"
-              style={{ 
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #00FF41, #00D0FF)',
-                border: 'none',
-                fontWeight: '600'
-              }}
-            />
+        <div style={styles.headerContent}>
+          <div style={styles.logo}>
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M8 16C8 16 12 8 20 8C28 8 32 16 32 16" stroke="url(#gradient1)" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M32 24C32 24 28 32 20 32C12 32 8 24 8 24" stroke="url(#gradient2)" strokeWidth="3" strokeLinecap="round"/>
+              <defs>
+                <linearGradient id="gradient1" x1="8" y1="8" x2="32" y2="16">
+                  <stop stopColor="#FF6B35"/>
+                  <stop offset="1" stopColor="#F7931E"/>
+                </linearGradient>
+                <linearGradient id="gradient2" x1="8" y1="24" x2="32" y2="32">
+                  <stop stopColor="#F7931E"/>
+                  <stop offset="1" stopColor="#FCBA04"/>
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
+          <ConnectWallet 
+            theme="dark"
+            btnTitle="Connect"
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(255, 107, 53, 0.5)',
+              borderRadius: '8px',
+              color: '#FF6B35',
+              fontSize: '14px',
+              fontWeight: '500',
+              padding: '10px 24px',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          />
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section style={styles.hero}>
-        <div style={styles.container}>
-          <div style={styles.heroContent}>
-            <div style={styles.badge}>Q1 2026 LAUNCH • BSC CHAIN</div>
-            <h1 style={styles.heroTitle}>
-              HYBRIDX Whitelist<br />
-              <span style={styles.gradient}>20,000 Spots Available</span>
-            </h1>
-            <p style={styles.heroDesc}>
-              Secure your spot for the $1M BNB + $1M HYBRIDX airdrop.<br />
-              World's first hybrid launchpool combining fair distribution with massive rewards.
-            </p>
+      {/* Mobile Menu */}
+      <button style={styles.menuToggle} onClick={() => setMenuOpen(!menuOpen)}>
+        <div style={styles.hamburger}>
+          <span style={{...styles.bar, transform: menuOpen ? 'rotate(45deg) translateY(8px)' : 'none'}}></span>
+          <span style={{...styles.bar, opacity: menuOpen ? 0 : 1}}></span>
+          <span style={{...styles.bar, transform: menuOpen ? 'rotate(-45deg) translateY(-8px)' : 'none'}}></span>
+        </div>
+      </button>
 
-            {/* Counter */}
-            <div style={styles.counter}>
-              <div style={styles.counterNumber}>{(20000 - spotsRemaining).toLocaleString()}</div>
-              <div style={styles.counterLabel}>/ 20,000 Spots Claimed</div>
-            </div>
+      {menuOpen && (
+        <div style={styles.mobileMenu}>
+          <button style={styles.menuItem} onClick={() => { setActiveSection('home'); setMenuOpen(false); }}>Home</button>
+          <button style={styles.menuItem} onClick={() => { setActiveSection('about'); setMenuOpen(false); }}>About</button>
+          <button style={styles.menuItem} onClick={() => { setActiveSection('benefits'); setMenuOpen(false); }}>Benefits</button>
+          <button style={styles.menuItem} onClick={() => { setActiveSection('faq'); setMenuOpen(false); }}>FAQ</button>
+        </div>
+      )}
 
-            {/* Wallet Status */}
-            {!address ? (
-              <div style={styles.walletPrompt}>
-                <p style={styles.walletPromptText}>Connect your wallet to join the whitelist</p>
-                <div style={{...styles.arrow, marginTop: '20px'}}>↑</div>
-              </div>
-            ) : (
-              <div style={styles.walletBox}>
-                <div style={styles.walletAddress}>
-                  {address.slice(0, 6)}...{address.slice(-4)}
-                </div>
+      {/* Main Content */}
+      <main style={styles.main}>
+        {activeSection === 'home' && (
+          <>
+            {/* Hero Section */}
+            <section style={styles.hero}>
+              <div style={styles.heroContent}>
+                <h1 style={styles.title}>HYBRIDX</h1>
                 
-                {isWhitelisted ? (
-                  <div style={styles.successBadge}>
-                    ✓ Whitelisted! You're in for the airdrop
+                {/* Card Display */}
+                <div style={styles.cardContainer}>
+                  <div style={styles.card}>
+                    <div style={styles.cardInner}>
+                      <div style={styles.cardPattern}></div>
+                      <svg width="120" height="120" viewBox="0 0 120 120" style={styles.cardLogo}>
+                        <path d="M24 48C24 48 36 24 60 24C84 24 96 48 96 48" stroke="#FF6B35" strokeWidth="6" strokeLinecap="round"/>
+                        <path d="M96 72C96 72 84 96 60 96C36 96 24 72 24 72" stroke="#FCBA04" strokeWidth="6" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div style={{...styles.card, marginLeft: '-40px'}}>
+                    <div style={{...styles.cardInner, background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'}}>
+                      <div style={styles.cardPattern}></div>
+                      <svg width="120" height="120" viewBox="0 0 120 120" style={styles.cardLogo}>
+                        <path d="M24 48C24 48 36 24 60 24C84 24 96 48 96 48" stroke="#ffffff" strokeWidth="6" strokeLinecap="round"/>
+                        <path d="M96 72C96 72 84 96 60 96C36 96 24 72 24 72" stroke="#cccccc" strokeWidth="6" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <h2 style={styles.subtitle}>
+                  #beyourownVC and join the<br/>
+                  <span style={styles.highlight}>HYBRIDX Whitelist</span>
+                </h2>
+
+                {!address ? (
+                  <p style={styles.connectPrompt}>Connect your wallet to join</p>
+                ) : isWhitelisted ? (
+                  <div style={styles.statusBox}>
+                    <div style={styles.successIcon}>✓</div>
+                    <p style={styles.statusText}>You're whitelisted!</p>
+                    <p style={styles.statusSubtext}>Eligible for $1M BNB + $1M HYBRIDX airdrop</p>
                   </div>
                 ) : (
                   <>
-                    <div style={styles.notWhitelisted}>Not Whitelisted Yet</div>
                     <button 
-                      style={styles.joinBtn}
+                      style={styles.mainButton}
                       onClick={handleJoinWhitelist}
                       disabled={isLoading}
                     >
                       {isLoading ? 'Processing...' : 'Join Whitelist (0.005 BNB)'}
                     </button>
+                    <p style={styles.spotsText}>{(20000 - spotsRemaining).toLocaleString()} / 20,000 spots claimed</p>
                   </>
                 )}
 
-                {showSuccess && (
-                  <div style={styles.successMessage}>
-                    🎉 Success! You've been whitelisted. See you in Q1 2026!
-                  </div>
-                )}
-
                 {isError && (
-                  <div style={styles.errorMessage}>
-                    ❌ Transaction failed. Please try again.
+                  <div style={styles.errorBox}>
+                    Transaction failed. Please try again.
                   </div>
                 )}
               </div>
-            )}
-          </div>
-        </div>
-      </section>
+            </section>
 
-      {/* Project Overview */}
-      <section style={styles.section}>
-        <div style={styles.container}>
-          <h2 style={styles.sectionTitle}>What is HYBRIDX?</h2>
-          <div style={styles.overviewGrid}>
-            <div style={styles.overviewCard}>
-              <div style={styles.overviewIcon}>🔄</div>
-              <h3 style={styles.overviewTitle}>Hybrid Mechanics</h3>
-              <p style={styles.overviewText}>
-                First platform to combine launchpad's explosive upside with launchpool's steady rewards.
-              </p>
-            </div>
-            <div style={styles.overviewCard}>
-              <div style={styles.overviewIcon}>💎</div>
-              <h3 style={styles.overviewTitle}>Fair Distribution</h3>
-              <p style={styles.overviewText}>
-                No VC, no presale. Pure community-driven launch with equal opportunity for all.
-              </p>
-            </div>
-            <div style={styles.overviewCard}>
-              <div style={styles.overviewIcon}>⚡</div>
-              <h3 style={styles.overviewTitle}>Stake & Earn</h3>
-              <p style={styles.overviewText}>
-                Stake BNB in our launchpool to earn HYBRIDX tokens with multipliers for whitelisters.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Token Allocation */}
-      <section style={{...styles.section, background: 'rgba(0, 255, 65, 0.02)'}}>
-        <div style={styles.container}>
-          <h2 style={styles.sectionTitle}>Token Allocation</h2>
-          <div style={styles.allocationGrid}>
-            <div style={styles.allocationCard}>
-              <div style={styles.allocationNumber}>100M</div>
-              <div style={styles.allocationLabel}>Total Supply</div>
-            </div>
-            <div style={styles.allocationCard}>
-              <div style={styles.allocationNumber}>30%</div>
-              <div style={styles.allocationLabel}>Community Airdrop</div>
-            </div>
-            <div style={styles.allocationCard}>
-              <div style={styles.allocationNumber}>$1M</div>
-              <div style={styles.allocationLabel}>BNB Airdrop Pool</div>
-            </div>
-            <div style={styles.allocationCard}>
-              <div style={styles.allocationNumber}>$1M</div>
-              <div style={styles.allocationLabel}>HYBRIDX Airdrop Pool</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Staking Preview */}
-      <section style={styles.section}>
-        <div style={styles.container}>
-          <h2 style={styles.sectionTitle}>How Staking Works</h2>
-          <div style={styles.stakingFlow}>
-            <div style={styles.flowStep}>
-              <div style={styles.flowNumber}>1</div>
-              <h4 style={styles.flowTitle}>Join Whitelist</h4>
-              <p style={styles.flowText}>Deposit 0.005 BNB now</p>
-            </div>
-            <div style={styles.flowArrow}>→</div>
-            <div style={styles.flowStep}>
-              <div style={styles.flowNumber}>2</div>
-              <h4 style={styles.flowTitle}>Launch Q1 2026</h4>
-              <p style={styles.flowText}>Stake BNB in launchpool</p>
-            </div>
-            <div style={styles.flowArrow}>→</div>
-            <div style={styles.flowStep}>
-              <div style={styles.flowNumber}>3</div>
-              <h4 style={styles.flowTitle}>Earn Rewards</h4>
-              <p style={styles.flowText}>Get HYBRIDX + airdrop</p>
-            </div>
-            <div style={styles.flowArrow}>→</div>
-            <div style={styles.flowStep}>
-              <div style={styles.flowNumber}>4</div>
-              <h4 style={styles.flowTitle}>DEX Listing</h4>
-              <p style={styles.flowText}>Trade on PancakeSwap</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section style={styles.section}>
-        <div style={styles.container}>
-          <h2 style={styles.sectionTitle}>Whitelist Benefits</h2>
-          <div style={styles.benefitsGrid}>
-            <div style={styles.benefitCard}>
-              <div style={styles.benefitIcon}>🎯</div>
-              <h3 style={styles.benefitTitle}>Priority Access</h3>
-              <p style={styles.benefitText}>
-                First access to the Q1 2026 launchpool with enhanced staking multipliers
-              </p>
-            </div>
-            <div style={styles.benefitCard}>
-              <div style={styles.benefitIcon}>💰</div>
-              <h3 style={styles.benefitTitle}>Massive Airdrop</h3>
-              <p style={styles.benefitText}>
-                Share of $1M BNB + $1M HYBRIDX distributed pro-rata to whitelisted wallets
-              </p>
-            </div>
-            <div style={styles.benefitCard}>
-              <div style={styles.benefitIcon}>🚀</div>
-              <h3 style={styles.benefitTitle}>Fair Launch</h3>
-              <p style={styles.benefitText}>
-                No VC dumping, no presale. Pure community-driven with equal opportunity
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section style={styles.section}>
-        <div style={styles.container}>
-          <h2 style={styles.sectionTitle}>Frequently Asked Questions</h2>
-          <div style={styles.faqContainer}>
-            {faqs.map((faq, i) => (
-              <div key={i} style={styles.faqItem}>
-                <button 
-                  style={styles.faqQuestion}
-                  onClick={() => setFaqOpen(faqOpen === i ? null : i)}
-                >
-                  <span>{faq.q}</span>
-                  <span style={{...styles.faqIcon, transform: faqOpen === i ? 'rotate(180deg)' : 'rotate(0)'}}>
-                    ▼
-                  </span>
-                </button>
-                <div style={{
-                  ...styles.faqAnswer,
-                  maxHeight: faqOpen === i ? '200px' : '0',
-                  padding: faqOpen === i ? '20px 28px' : '0 28px'
-                }}>
-                  <p style={styles.faqText}>{faq.a}</p>
+            {/* Quick Info */}
+            <section style={styles.infoSection}>
+              <div style={styles.infoGrid}>
+                <div style={styles.infoCard}>
+                  <div style={styles.infoNumber}>$2M</div>
+                  <div style={styles.infoLabel}>Total Airdrop Pool</div>
+                </div>
+                <div style={styles.infoCard}>
+                  <div style={styles.infoNumber}>20,000</div>
+                  <div style={styles.infoLabel}>Whitelist Spots</div>
+                </div>
+                <div style={styles.infoCard}>
+                  <div style={styles.infoNumber}>Q1 2026</div>
+                  <div style={styles.infoLabel}>Launch Date</div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </section>
+          </>
+        )}
+
+        {activeSection === 'about' && (
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>About HYBRIDX</h2>
+            <div style={styles.aboutContent}>
+              <p style={styles.aboutText}>
+                HYBRIDX is the world's first hybrid DeFi launchpool on Binance Smart Chain (BSC), 
+                revolutionizing how communities participate in token launches.
+              </p>
+              <div style={styles.featureList}>
+                <div style={styles.feature}>
+                  <span style={styles.featureIcon}>⚡</span>
+                  <span style={styles.featureText}>Hybrid launchpad + launchpool mechanics</span>
+                </div>
+                <div style={styles.feature}>
+                  <span style={styles.featureIcon}>💎</span>
+                  <span style={styles.featureText}>Fair distribution - no VC dumping</span>
+                </div>
+                <div style={styles.feature}>
+                  <span style={styles.featureIcon}>🚀</span>
+                  <span style={styles.featureText}>Stake BNB to earn HYBRIDX tokens</span>
+                </div>
+                <div style={styles.feature}>
+                  <span style={styles.featureIcon}>🎯</span>
+                  <span style={styles.featureText}>Community-first approach</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {activeSection === 'benefits' && (
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>Whitelist Benefits</h2>
+            <div style={styles.benefitsList}>
+              <div style={styles.benefitItem}>
+                <h3 style={styles.benefitTitle}>Priority Access</h3>
+                <p style={styles.benefitDesc}>Be among the first to stake in the Q1 2026 launchpool with enhanced multipliers</p>
+              </div>
+              <div style={styles.benefitItem}>
+                <h3 style={styles.benefitTitle}>Massive Airdrop</h3>
+                <p style={styles.benefitDesc}>Share of $1M BNB + $1M HYBRIDX distributed pro-rata to all whitelisted wallets</p>
+              </div>
+              <div style={styles.benefitItem}>
+                <h3 style={styles.benefitTitle}>Fair Launch</h3>
+                <p style={styles.benefitDesc}>No VC dumping, no presale. Pure community-driven with equal opportunity for all</p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {activeSection === 'faq' && (
+          <section style={styles.section}>
+            <h2 style={styles.sectionTitle}>FAQ</h2>
+            <div style={styles.faqList}>
+              {faqs.map((faq, i) => (
+                <div key={i} style={styles.faqItem}>
+                  <button 
+                    style={styles.faqQuestion}
+                    onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                  >
+                    <span>{faq.q}</span>
+                    <span style={{...styles.faqIcon, transform: faqOpen === i ? 'rotate(180deg)' : 'none'}}>▼</span>
+                  </button>
+                  {faqOpen === i && (
+                    <div style={styles.faqAnswer}>
+                      <p>{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
 
       {/* Footer */}
       <footer style={styles.footer}>
-        <div style={styles.container}>
-          <div style={styles.footerContent}>
-            <div style={styles.footerText}>© 2026 HYBRIDX. All rights reserved.</div>
-            <div style={styles.footerLinks}>
-              <a href="https://x.com/HYBRIDX_HYBX" target="_blank" style={styles.footerLink}>Twitter</a>
-              <a href="#" style={styles.footerLink}>Telegram</a>
-              <a href="#" style={styles.footerLink}>Discord</a>
-            </div>
+        <div style={styles.footerContent}>
+          <p style={styles.footerText}>© 2026 HYBRIDX. All rights reserved.</p>
+          <div style={styles.socialLinks}>
+            <a href="https://x.com/HYBRIDX_HYBX" target="_blank" style={styles.socialLink}>Twitter</a>
+            <a href="#" style={styles.socialLink}>Telegram</a>
+            <a href="#" style={styles.socialLink}>Discord</a>
           </div>
         </div>
       </footer>
@@ -333,393 +287,369 @@ function WhitelistApp() {
   );
 }
 
-// Styles
 const styles = {
   app: {
-    fontFamily: 'Inter, sans-serif',
-    background: '#0f0f1a',
-    color: '#fff',
     minHeight: '100vh',
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  particles: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: 'radial-gradient(circle at 20% 50%, rgba(0, 255, 65, 0.08), transparent 50%), radial-gradient(circle at 80% 80%, rgba(0, 208, 255, 0.08), transparent 50%)',
-    animation: 'float 20s ease-in-out infinite',
-    pointerEvents: 'none',
-    zIndex: 0,
-  },
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 20px',
-    position: 'relative',
-    zIndex: 1,
+    background: '#0a0a0a',
+    color: '#ffffff',
+    fontFamily: 'Inter, sans-serif',
   },
   header: {
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
-    background: 'rgba(15, 15, 26, 0.9)',
-    backdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(0, 255, 65, 0.1)',
-    padding: '20px 0',
     zIndex: 1000,
+    background: 'rgba(10, 10, 10, 0.95)',
+    backdropFilter: 'blur(10px)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
   },
   headerContent: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '20px 24px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   logo: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '24px',
-    fontWeight: '900',
-    background: 'linear-gradient(135deg, #00FF41, #00D0FF)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    letterSpacing: '2px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  menuToggle: {
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    zIndex: 1001,
+    width: '56px',
+    height: '56px',
+    background: '#1a1a1a',
+    border: '1px solid rgba(255, 107, 53, 0.3)',
+    borderRadius: '12px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.3s ease',
+  },
+  hamburger: {
+    width: '24px',
+    height: '18px',
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  bar: {
+    width: '100%',
+    height: '2px',
+    background: '#FF6B35',
+    transition: 'all 0.3s ease',
+  },
+  mobileMenu: {
+    position: 'fixed',
+    bottom: '90px',
+    right: '24px',
+    zIndex: 1000,
+    background: '#1a1a1a',
+    border: '1px solid rgba(255, 107, 53, 0.3)',
+    borderRadius: '12px',
+    padding: '12px',
+    minWidth: '180px',
+  },
+  menuItem: {
+    width: '100%',
+    padding: '12px 16px',
+    background: 'transparent',
+    border: 'none',
+    color: '#ffffff',
+    textAlign: 'left',
+    cursor: 'pointer',
+    fontSize: '14px',
+    transition: 'all 0.2s ease',
+    borderRadius: '6px',
+  },
+  main: {
+    paddingTop: '80px',
+    minHeight: 'calc(100vh - 80px)',
   },
   hero: {
-    paddingTop: '140px',
-    paddingBottom: '80px',
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '80px 24px 60px',
     textAlign: 'center',
   },
   heroContent: {
-    maxWidth: '800px',
-    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
-  badge: {
-    display: 'inline-block',
-    padding: '10px 24px',
-    background: 'rgba(0, 255, 65, 0.1)',
-    border: '1px solid rgba(0, 255, 65, 0.3)',
-    borderRadius: '100px',
-    fontSize: '12px',
-    fontWeight: '700',
-    letterSpacing: '2px',
-    color: '#00FF41',
-    marginBottom: '32px',
-  },
-  heroTitle: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '56px',
-    fontWeight: '900',
-    lineHeight: '1.2',
-    marginBottom: '24px',
-    letterSpacing: '1px',
-  },
-  gradient: {
-    background: 'linear-gradient(135deg, #00FF41, #00D0FF)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-  },
-  heroDesc: {
-    fontSize: '18px',
-    lineHeight: '1.8',
-    color: 'rgba(255, 255, 255, 0.7)',
-    marginBottom: '48px',
-  },
-  counter: {
-    display: 'inline-block',
-    padding: '24px 48px',
-    background: 'rgba(0, 255, 65, 0.05)',
-    border: '2px solid #00FF41',
-    borderRadius: '16px',
-    marginBottom: '48px',
-  },
-  counterNumber: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '48px',
-    fontWeight: '900',
-    color: '#00FF41',
-    marginBottom: '8px',
-  },
-  counterLabel: {
-    fontSize: '14px',
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
-  walletPrompt: {
-    padding: '40px',
-    background: 'rgba(0, 208, 255, 0.05)',
-    border: '1px solid rgba(0, 208, 255, 0.2)',
-    borderRadius: '16px',
-  },
-  walletPromptText: {
-    fontSize: '18px',
-    color: '#00D0FF',
-    fontWeight: '600',
-  },
-  arrow: {
+  title: {
     fontSize: '32px',
-    color: '#00D0FF',
-    animation: 'bounce 2s ease-in-out infinite',
-  },
-  walletBox: {
-    padding: '40px',
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
-  },
-  walletAddress: {
-    fontSize: '16px',
-    color: 'rgba(255, 255, 255, 0.6)',
-    marginBottom: '24px',
-    fontFamily: 'monospace',
-  },
-  notWhitelisted: {
-    padding: '16px',
-    background: 'rgba(255, 255, 65, 0.1)',
-    border: '1px solid rgba(255, 255, 65, 0.3)',
-    borderRadius: '12px',
-    color: '#ffff41',
-    marginBottom: '20px',
-    fontWeight: '600',
-  },
-  successBadge: {
-    padding: '20px',
-    background: 'rgba(0, 255, 65, 0.1)',
-    border: '2px solid #00FF41',
-    borderRadius: '12px',
-    color: '#00FF41',
-    fontSize: '18px',
     fontWeight: '700',
+    marginBottom: '48px',
+    letterSpacing: '2px',
   },
-  joinBtn: {
+  cardContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '48px',
+    perspective: '1000px',
+  },
+  card: {
+    width: '240px',
+    height: '340px',
+    transition: 'transform 0.3s ease',
+  },
+  cardInner: {
     width: '100%',
-    padding: '18px',
-    background: 'linear-gradient(135deg, #00FF41, #00D0FF)',
-    border: 'none',
-    borderRadius: '12px',
-    color: '#0f0f1a',
-    fontSize: '16px',
-    fontWeight: '700',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
+    height: '100%',
+    background: 'linear-gradient(135deg, #2d1810 0%, #1a0f0a 100%)',
+    border: '2px solid rgba(255, 107, 53, 0.3)',
+    borderRadius: '16px',
+    padding: '32px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    overflow: 'hidden',
   },
-  successMessage: {
-    marginTop: '20px',
-    padding: '16px',
-    background: 'rgba(0, 255, 65, 0.15)',
-    border: '1px solid #00FF41',
-    borderRadius: '12px',
-    color: '#00FF41',
+  cardPattern: {
+    position: 'absolute',
+    inset: 0,
+    background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 107, 53, 0.03) 10px, rgba(255, 107, 53, 0.03) 20px)',
   },
-  errorMessage: {
-    marginTop: '20px',
-    padding: '16px',
-    background: 'rgba(255, 65, 65, 0.15)',
-    border: '1px solid #ff4141',
-    borderRadius: '12px',
-    color: '#ff4141',
-  },
-  section: {
-    padding: '80px 20px',
+  cardLogo: {
     position: 'relative',
     zIndex: 1,
   },
-  sectionTitle: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '42px',
-    fontWeight: '900',
-    textAlign: 'center',
-    marginBottom: '60px',
+  subtitle: {
+    fontSize: '28px',
+    fontWeight: '400',
+    lineHeight: '1.5',
+    marginBottom: '40px',
+    color: 'rgba(255, 255, 255, 0.9)',
   },
-  overviewGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '32px',
+  highlight: {
+    color: '#FF6B35',
+    fontWeight: '600',
   },
-  overviewCard: {
-    padding: '40px',
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
-    transition: 'all 0.3s ease',
-  },
-  overviewIcon: {
-    fontSize: '48px',
-    marginBottom: '20px',
-  },
-  overviewTitle: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '24px',
-    marginBottom: '16px',
-    color: '#00FF41',
-  },
-  overviewText: {
+  connectPrompt: {
     fontSize: '16px',
-    lineHeight: '1.7',
-    color: 'rgba(255, 255, 255, 0.7)',
-  },
-  allocationGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '24px',
-  },
-  allocationCard: {
-    padding: '32px',
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(0, 255, 65, 0.2)',
-    borderRadius: '16px',
-    textAlign: 'center',
-  },
-  allocationNumber: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '36px',
-    fontWeight: '900',
-    color: '#00FF41',
-    marginBottom: '12px',
-  },
-  allocationLabel: {
-    fontSize: '14px',
     color: 'rgba(255, 255, 255, 0.6)',
+    marginTop: '24px',
   },
-  stakingFlow: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '24px',
-    flexWrap: 'wrap',
+  mainButton: {
+    padding: '16px 48px',
+    background: 'transparent',
+    border: '2px solid #FF6B35',
+    borderRadius: '8px',
+    color: '#FF6B35',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    fontFamily: 'Inter, sans-serif',
   },
-  flowStep: {
+  spotsText: {
+    marginTop: '16px',
+    fontSize: '14px',
+    color: 'rgba(255, 255, 255, 0.5)',
+  },
+  statusBox: {
     padding: '32px',
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '16px',
+    background: 'rgba(16, 185, 129, 0.1)',
+    border: '1px solid rgba(16, 185, 129, 0.3)',
+    borderRadius: '12px',
     textAlign: 'center',
-    minWidth: '180px',
   },
-  flowNumber: {
+  successIcon: {
     width: '48px',
     height: '48px',
     margin: '0 auto 16px',
-    background: 'linear-gradient(135deg, #00FF41, #00D0FF)',
+    background: 'rgba(16, 185, 129, 0.2)',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily: 'Orbitron, sans-serif',
     fontSize: '24px',
-    fontWeight: '900',
-    color: '#0f0f1a',
+    color: '#10b981',
   },
-  flowTitle: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '18px',
+  statusText: {
+    fontSize: '20px',
+    fontWeight: '600',
+    color: '#10b981',
     marginBottom: '8px',
   },
-  flowText: {
+  statusSubtext: {
     fontSize: '14px',
     color: 'rgba(255, 255, 255, 0.6)',
   },
-  flowArrow: {
-    fontSize: '32px',
-    color: '#00FF41',
+  errorBox: {
+    marginTop: '16px',
+    padding: '12px 24px',
+    background: 'rgba(239, 68, 68, 0.1)',
+    border: '1px solid rgba(239, 68, 68, 0.3)',
+    borderRadius: '8px',
+    color: '#ef4444',
+    fontSize: '14px',
   },
-  benefitsGrid: {
+  infoSection: {
+    padding: '60px 24px',
+    background: 'rgba(255, 255, 255, 0.02)',
+  },
+  infoGrid: {
+    maxWidth: '900px',
+    margin: '0 auto',
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '32px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '24px',
   },
-  benefitCard: {
+  infoCard: {
+    padding: '32px',
+    background: 'rgba(255, 255, 255, 0.03)',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
+    borderRadius: '12px',
+    textAlign: 'center',
+  },
+  infoNumber: {
+    fontSize: '32px',
+    fontWeight: '700',
+    color: '#FF6B35',
+    marginBottom: '8px',
+  },
+  infoLabel: {
+    fontSize: '14px',
+    color: 'rgba(255, 255, 255, 0.6)',
+  },
+  section: {
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '80px 24px',
+  },
+  sectionTitle: {
+    fontSize: '32px',
+    fontWeight: '700',
+    marginBottom: '48px',
+    textAlign: 'center',
+  },
+  aboutContent: {
     padding: '40px',
     background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
     borderRadius: '16px',
   },
-  benefitIcon: {
-    fontSize: '48px',
-    marginBottom: '20px',
+  aboutText: {
+    fontSize: '18px',
+    lineHeight: '1.8',
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: '32px',
+  },
+  featureList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  feature: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+  },
+  featureIcon: {
+    fontSize: '24px',
+  },
+  featureText: {
+    fontSize: '16px',
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  benefitsList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+  },
+  benefitItem: {
+    padding: '32px',
+    background: 'rgba(255, 255, 255, 0.02)',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
+    borderRadius: '12px',
   },
   benefitTitle: {
-    fontFamily: 'Orbitron, sans-serif',
-    fontSize: '24px',
-    marginBottom: '16px',
-    color: '#00D0FF',
+    fontSize: '20px',
+    fontWeight: '600',
+    color: '#FF6B35',
+    marginBottom: '12px',
   },
-  benefitText: {
+  benefitDesc: {
     fontSize: '16px',
     lineHeight: '1.7',
     color: 'rgba(255, 255, 255, 0.7)',
   },
-  faqContainer: {
-    maxWidth: '800px',
-    margin: '0 auto',
+  faqList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
   },
   faqItem: {
-    marginBottom: '16px',
     background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
     borderRadius: '12px',
     overflow: 'hidden',
   },
   faqQuestion: {
     width: '100%',
-    padding: '24px 28px',
-    background: 'none',
+    padding: '20px 24px',
+    background: 'transparent',
     border: 'none',
-    color: '#fff',
-    fontSize: '18px',
-    fontWeight: '600',
+    color: '#ffffff',
+    fontSize: '16px',
+    fontWeight: '500',
     textAlign: 'left',
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    fontFamily: 'Orbitron, sans-serif',
+    fontFamily: 'Inter, sans-serif',
   },
   faqIcon: {
+    fontSize: '12px',
+    color: '#FF6B35',
     transition: 'transform 0.3s ease',
-    color: '#00FF41',
   },
   faqAnswer: {
-    maxHeight: 0,
-    overflow: 'hidden',
-    transition: 'all 0.3s ease',
-  },
-  faqText: {
-    fontSize: '16px',
+    padding: '0 24px 20px',
+    fontSize: '15px',
     lineHeight: '1.7',
     color: 'rgba(255, 255, 255, 0.7)',
   },
   footer: {
-    padding: '40px 20px',
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-    position: 'relative',
-    zIndex: 1,
+    borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+    padding: '32px 24px',
   },
   footerContent: {
+    maxWidth: '1200px',
+    margin: '0 auto',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: '20px',
+    gap: '16px',
   },
   footerText: {
-    color: 'rgba(255, 255, 255, 0.4)',
     fontSize: '14px',
+    color: 'rgba(255, 255, 255, 0.4)',
   },
-  footerLinks: {
+  socialLinks: {
     display: 'flex',
     gap: '24px',
   },
-  footerLink: {
-    color: '#00FF41',
-    textDecoration: 'none',
+  socialLink: {
     fontSize: '14px',
-    fontWeight: '600',
-    transition: 'color 0.3s ease',
+    color: '#FF6B35',
+    textDecoration: 'none',
+    transition: 'opacity 0.2s ease',
   },
 };
 
-// Root Component with ThirdwebProvider
 export default function App() {
   return (
     <ThirdwebProvider
@@ -729,7 +659,7 @@ export default function App() {
     >
       <style>
         {`
-          @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700;800&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
           
           * {
             margin: 0;
@@ -740,32 +670,30 @@ export default function App() {
           body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-          }
-
-          @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-          }
-
-          @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            -webkit-font-smoothing: antialiased;
           }
 
           button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+            opacity: 0.8;
           }
 
-          .faq-item:hover {
-            border-color: rgba(0, 255, 65, 0.3);
+          .menuItem:hover {
+            background: rgba(255, 107, 53, 0.1) !important;
+            color: #FF6B35 !important;
           }
 
-          .overview-card:hover, .benefit-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0, 255, 65, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 255, 65, 0.1);
+          @media (max-width: 768px) {
+            .card {
+              width: 160px !important;
+              height: 240px !important;
+            }
+            .cardInner {
+              padding: 20px !important;
+            }
+            .cardLogo {
+              width: 80px !important;
+              height: 80px !important;
+            }
           }
         `}
       </style>
