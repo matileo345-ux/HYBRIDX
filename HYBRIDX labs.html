@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYBRIDX Labs - Opening Soon</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FCBA04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .back-btn {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1px solid rgba(255, 107, 53, 0.5);
+      border-radius: 8px;
+      color: #FF6B35;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 107, 53, 0.1);
+      border-color: #FF6B35;
+    }
+
+    /* Main Content */
+    main {
+      padding-top: 100px;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Opening Soon Overlay */
+    .opening-soon-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 100;
+      text-align: center;
+    }
+
+    .opening-soon-text {
+      font-size: 72px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FCBA04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 4px;
+      text-shadow: 0 0 60px rgba(255, 107, 53, 0.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    .opening-subtitle {
+      margin-top: 24px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+
+    /* Blurred Content */
+    .blurred-content {
+      filter: blur(8px);
+      opacity: 0.3;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Sections */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .view-all {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .project-card {
+      background: rgba(30, 30, 35, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .project-name {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-badge {
+      padding: 8px 20px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #10b981;
+      letter-spacing: 1px;
+    }
+
+    .project-desc {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 32px;
+    }
+
+    .project-details {
+      margin-bottom: 28px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .detail-label {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .detail-value {
+      font-size: 16px;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .view-btn {
+      width: 100%;
+      padding: 16px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .allocation-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .alloc-btn {
+      padding: 14px;
+      background: transparent;
+      border: 2px solid #FCBA04;
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .countdown {
+      font-size: 18px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .opening-soon-text {
+        font-size: 48px;
+      }
+      .opening-subtitle {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="/" class="logo">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <path d="M8 16C8 16 12 8 20 8C28 8 32 16 32 16" stroke="url(#gradient1)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 24C32 24 28 32 20 32C12 32 8 24 8 24" stroke="url(#gradient2)" stroke-width="3" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="gradient1" x1="8" y1="8" x2="32" y2="16">
+              <stop stop-color="#FF6B35"/>
+              <stop offset="1" stop-color="#F7931E"/>
+            </linearGradient>
+            <linearGradient id="gradient2" x1="8" y1="24" x2="32" y2="32">
+              <stop stop-color="#F7931E"/>
+              <stop offset="1" stop-color="#FCBA04"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="logo-text">HYBRIDX</div>
+      </a>
+      <a href="/" class="back-btn">← Back to Whitelist</a>
+    </div>
+  </header>
+
+  <!-- Opening Soon Overlay -->
+  <div class="opening-soon-overlay">
+    <div class="opening-soon-text">OPENING SOON</div>
+    <div class="opening-subtitle">HYBRIDX Labs is launching in Q1 2026</div>
+  </div>
+
+  <!-- Main Content (Blurred) -->
+  <main class="blurred-content">
+    <div class="container">
+      <!-- Featured Project -->
+      <div class="section-header">
+        <h2 class="section-title">Featured Project</h2>
+        <span class="view-all">View all projects →</span>
+      </div>
+
+      <div class="project-card">
+        <div class="card-header">
+          <div class="project-name">ProjectX</div>
+          <div class="status-badge">LIVE</div>
+        </div>
+        <p class="project-desc">The future of decentralized finance</p>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-label">Raise network:</span>
+            <span class="detail-value">Binance Smart Chain</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Distribution network:</span>
+            <span class="detail-value">TOKEN/BNB</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Target raise:</span>
+            <span class="detail-value">500k BUSD</span>
+          </div>
+        </div>
+        <button class="view-btn">View Project →</button>
+      </div>
+
+      <!-- Staking / Funding -->
+      <h2 class="section-title" style="margin: 60px 0 24px;">Staking / Funding</h2>
+      
+      <div class="project-card">
+        <div class="card-header">
+          <div class="project-name">StakeX</div>
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #FF6B35, #FCBA04);"></div>
+        </div>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-label">Raise network:</span>
+            <span class="detail-value">Arbitrum One</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Distribution network:</span>
+            <span class="detail-value">TON</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Target raise:</span>
+            <span class="detail-value">25k USDT</span>
+          </div>
+        </div>
+        <div class="allocation-btns">
+          <button class="alloc-btn">AME Allocation</button>
+          <button class="alloc-btn">Fixed Allocation</button>
+        </div>
+      </div>
+
+      <!-- Distributing Projects -->
+      <h2 class="section-title" style="margin: 60px 0 24px;">Distributing Projects</h2>
+      
+      <div class="project-card">
+        <div class="card-header">
+          <div class="project-name">DistroX</div>
+          <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #10b981;">DISTRIBUTION PHASE</div>
+        </div>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-label">Raise network:</span>
+            <span class="detail-value">Binance Smart Chain</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Distribution network:</span>
+            <span class="detail-value">Binance Smart Chain</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Target raise:</span>
+            <span class="detail-value">400k BUSD</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Allocation begins in:</span>
+            <span class="countdown">0 mins 0 secs</span>
+          </div>
+        </div>
+        <button class="view-btn">View DistroX →</button>
+      </div>
+
+      <!-- Awaiting Distribution -->
+      <h2 class="section-title" style="margin: 60px 0 24px;">Awaiting Distribution</h2>
+      
+      <div class="project-card">
+        <div class="card-header">
+          <div class="project-name">WaitingX</div>
+          <div class="status-badge" style="background: rgba(255, 193, 7, 0.1); border-color: rgba(255, 193, 7, 0.3); color: #ffc107;">AWAITING DISTRIBUTION</div>
+        </div>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-label">Raise network:</span>
+            <span class="detail-value">Arbitrum One</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Distribution network:</span>
+            <span class="detail-value">Mintlayer</span>
+          </div>
+        </div>
+        <button class="view-btn">View WaitingX →</button>
+      </div>
+
+      <!-- Distribution Completed -->
+      <h2 class="section-title" style="margin: 60px 0 24px;">Distribution Completed</h2>
+      
+      <div class="project-card">
+        <div class="card-header">
+          <div class="project-name">CompletedX</div>
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669);"></div>
+        </div>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-label">Raise network:</span>
+            <span class="detail-value">Binance Smart Chain</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Distribution network:</span>
+            <span class="detail-value">Ethereum Mainnet</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Target raise:</span>
+            <span class="detail-value">500k BUSD</span>
+          </div>
+        </div>
+        <button class="view-btn">View CompletedX →</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
