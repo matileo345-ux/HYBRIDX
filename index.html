@@ -55,6 +55,29 @@
       align-items: center;
     }
 
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .labs-link {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid rgba(102, 126, 234, 0.5);
+      border-radius: 8px;
+      color: #667eea;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .labs-link:hover {
+      background: rgba(102, 126, 234, 0.1);
+      border-color: #667eea;
+    }
+
     .logo {
       display: flex;
       align-items: center;
@@ -691,6 +714,9 @@
       .logo-text {
         font-size: 20px;
       }
+      .labs-link {
+        display: none;
+      }
       .main-card {
         padding: 32px 24px;
       }
@@ -745,7 +771,10 @@
         </svg>
         <div class="logo-text">HYBRIDX</div>
       </div>
-      <button class="connect-btn" id="headerConnectBtn">Connect Wallet</button>
+      <div class="header-right">
+        <a href="hybridxlabs.html" class="labs-link">HYBRIDX Labs</a>
+        <button class="connect-btn" id="headerConnectBtn">Connect Wallet</button>
+      </div>
     </div>
   </header>
 
@@ -761,6 +790,7 @@
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#" class="menu-item">Home</a>
+    <a href="hybridxlabs.html" class="menu-item">HYBRIDX Labs</a>
     <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="menu-item">Twitter</a>
     <a href="#" class="menu-item">Telegram</a>
     <a href="#" class="menu-item">Docs</a>
@@ -860,7 +890,7 @@
 
       <!-- Coming Soon Section -->
       <div class="coming-soon-section">
-        <h3 class="coming-soon-title">Coming Soon</h3>
+        <h3 class="coming-soon-title">HYBRIDX Labs - Coming Soon</h3>
         <div class="coming-soon-card">
           <div class="cs-header">
             <div class="cs-logo">
@@ -902,7 +932,7 @@
           </div>
 
           <div class="cs-footer">
-            <button class="cs-button">View HYBRIDX →</button>
+            <a href="hybridxlabs.html" class="cs-button" style="text-decoration: none; display: block;">View HYBRIDX Labs →</a>
           </div>
         </div>
       </div>
@@ -1058,16 +1088,6 @@
           userAddress = accounts[0];
           updateUI();
         }
-      }
-    });
-
-    // Coming Soon button click
-    document.addEventListener('DOMContentLoaded', function() {
-      const csButton = document.querySelector('.cs-button');
-      if (csButton) {
-        csButton.addEventListener('click', function() {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
       }
     });
   </script>
