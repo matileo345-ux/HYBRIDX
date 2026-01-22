@@ -55,8 +55,48 @@
       align-items: center;
     }
 
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FCBA04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+      position: relative;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        filter: brightness(1);
+      }
+      50% {
+        filter: brightness(1.3);
+      }
+    }
+
     .logo svg {
       display: block;
+      filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.4));
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
     }
 
     .connect-btn {
@@ -388,6 +428,124 @@
       color: rgba(255, 255, 255, 0.6);
     }
 
+    /* Coming Soon Section */
+    .coming-soon-section {
+      margin-top: 60px;
+      padding: 40px 0;
+    }
+
+    .coming-soon-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: #ffffff;
+    }
+
+    .coming-soon-card {
+      background: rgba(30, 30, 35, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(20px);
+    }
+
+    .cs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cs-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cs-brand {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF6B35 0%, #FCBA04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 1px;
+    }
+
+    .cs-badge {
+      padding: 8px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .cs-details {
+      margin-bottom: 28px;
+    }
+
+    .cs-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cs-row:last-child {
+      border-bottom: none;
+    }
+
+    .cs-label {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 400;
+    }
+
+    .cs-value {
+      font-size: 16px;
+      color: #ffffff;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .cs-highlight {
+      color: #FCBA04;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .cs-footer {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cs-button {
+      width: 100%;
+      padding: 16px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .cs-button:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 107, 53, 0.5);
+      color: #FF6B35;
+    }
+
     /* Loading Spinner */
     .loading {
       display: inline-block;
@@ -530,6 +688,9 @@
 
     /* Responsive */
     @media (max-width: 768px) {
+      .logo-text {
+        font-size: 20px;
+      }
       .main-card {
         padding: 32px 24px;
       }
@@ -538,6 +699,25 @@
       }
       .features-section {
         padding: 40px 24px;
+      }
+      .cs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .cs-brand {
+        font-size: 24px;
+      }
+      .cs-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .cs-value {
+        margin-top: 4px;
+      }
+      .coming-soon-card {
+        padding: 24px;
       }
     }
   </style>
@@ -563,6 +743,7 @@
             </linearGradient>
           </defs>
         </svg>
+        <div class="logo-text">HYBRIDX</div>
       </div>
       <button class="connect-btn" id="headerConnectBtn">Connect Wallet</button>
     </div>
@@ -673,6 +854,55 @@
           <div class="feature-text">
             <h4>Fair Distribution</h4>
             <p>No VC dumping. Pure community-driven launch with equal opportunity.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div class="coming-soon-section">
+        <h3 class="coming-soon-title">Coming Soon</h3>
+        <div class="coming-soon-card">
+          <div class="cs-header">
+            <div class="cs-logo">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M6 13C6 13 10 6 16 6C22 6 26 13 26 13" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M26 19C26 19 22 26 16 26C10 26 6 19 6 19" stroke="#FCBA04" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+              <span class="cs-brand">HYBRIDX</span>
+            </div>
+            <div class="cs-badge">COMING SOON</div>
+          </div>
+
+          <div class="cs-details">
+            <div class="cs-row">
+              <span class="cs-label">Raise network:</span>
+              <div class="cs-value">
+                <svg width="20" height="20" viewBox="0 0 126.61 126.61" fill="#F3BA2F" style="margin-right: 8px;">
+                  <path d="M38.73 53.2l24.59-24.58 24.6 24.6 14.3-14.31L63.32 0 24.43 38.88l14.3 14.31zm-14.3 10.12L10.11 77.63l14.31 14.31 14.31-14.31-14.3-14.31zM63.31 126.61l38.89-38.89-14.3-14.3-24.6 24.6-24.59-24.6-14.31 14.3 38.89 38.89h.02zm24.6-63.29l14.3 14.31 14.31-14.31-14.31-14.3-14.3 14.3z"/>
+                </svg>
+                Binance Chain
+              </div>
+            </div>
+
+            <div class="cs-row">
+              <span class="cs-label">Distribution network:</span>
+              <span class="cs-value">HYBX/BNB</span>
+            </div>
+
+            <div class="cs-row">
+              <span class="cs-label">Target raise:</span>
+              <div class="cs-value cs-highlight">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FCBA04" stroke-width="2" style="margin-right: 6px;">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                $1M
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-footer">
+            <button class="cs-button">View HYBRIDX →</button>
           </div>
         </div>
       </div>
@@ -828,6 +1058,16 @@
           userAddress = accounts[0];
           updateUI();
         }
+      }
+    });
+
+    // Coming Soon button click
+    document.addEventListener('DOMContentLoaded', function() {
+      const csButton = document.querySelector('.cs-button');
+      if (csButton) {
+        csButton.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       }
     });
   </script>
