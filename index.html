@@ -7,9 +7,11 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- WalletConnect -->
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <!-- Thirdweb SDK -->
+  <script type="module">
+    import { ThirdwebSDK } from "https://esm.sh/@thirdweb-dev/sdk@4";
+    window.ThirdwebSDK = ThirdwebSDK;
+  </script>
   
   <style>
     * {
@@ -96,9 +98,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-family: 'Inter', sans-serif;
-      text-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
-      position: relative;
       animation: glow 3s ease-in-out infinite;
     }
 
@@ -136,6 +135,7 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
     }
 
     .connect-btn:hover {
@@ -348,7 +348,7 @@
       box-shadow: 0 10px 30px rgba(139, 63, 187, 0.4);
     }
 
-    /* Success Message */
+    /* Messages */
     .success-message {
       margin-top: 20px;
       padding: 16px 20px;
@@ -360,7 +360,6 @@
       font-size: 15px;
     }
 
-    /* Error Message */
     .error-message {
       margin-top: 20px;
       padding: 16px 20px;
@@ -953,27 +952,19 @@
     </div>
   </footer>
 
-  <script>
-    console.log('=== HYBRIDX Whitelist App v2 ===');
+  <script type="module">
+    // Import ethers from CDN
+    import { ethers } from 'https://cdn.ethers.io/lib/ethers-5.7.esm.min.js';
+    
+    console.log('=== HYBRIDX Whitelist (Thirdweb Edition) ===');
     
     const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
     const DEPOSIT_AMOUNT = '0.005';
     const BSC_CHAIN_ID = 56;
-    const BSC_CHAIN_ID_HEX = '0x38';
     
     let provider = null;
-    let web3 = null;
+    let signer = null;
     let userAddress = null;
-    let isWalletBrowser = false;
-
-    // Check if in wallet browser
-    function detectWalletBrowser() {
-      const ua = navigator.userAgent;
-      isWalletBrowser = /MetaMask|Trust|TokenPocket|imToken/i.test(ua) || 
-                        (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask);
-      console.log('Wallet browser detected:', isWalletBrowser);
-      return isWalletBrowser;
-    }
 
     // Menu Toggle
     document.getElementById('menuToggle').addEventListener('click', function() {
@@ -981,105 +972,52 @@
       document.getElementById('mobileMenu').classList.toggle('active');
     });
 
-    // Connect Wallet - Universal
-    const headerConnectBtn = document.getElementById('headerConnectBtn');
-    if (headerConnectBtn) {
-      headerConnectBtn.addEventListener('click', connectWallet);
-    }
-
-    window.connectWallet = connectWallet;
-
-    async function connectWallet() {
-      console.log('Connect wallet clicked');
-      detectWalletBrowser();
-
+    // Connect Wallet
+    window.connectWallet = async function() {
+      console.log('Connecting wallet...');
+      
       try {
-        if (isWalletBrowser && typeof window.ethereum !== 'undefined') {
-          // Use injected provider (Wallet Browser)
-          await connectWithInjected();
-        } else if (typeof window.WalletConnectProvider !== 'undefined') {
-          // Use WalletConnect (Normal Browser)
-          await connectWithWalletConnect();
+        if (typeof window.ethereum !== 'undefined') {
+          // Request accounts
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          
+          // Create provider and signer
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          signer = provider.getSigner();
+          userAddress = await signer.getAddress();
+          
+          console.log('Connected:', userAddress);
+          
+          // Check network
+          const network = await provider.getNetwork();
+          if (network.chainId !== BSC_CHAIN_ID) {
+            await switchToBSC();
+          }
+          
+          updateUI();
+          setupListeners();
         } else {
-          throw new Error('Please use a wallet browser or install MetaMask');
+          alert('Please install MetaMask, Trust Wallet, or another Web3 wallet!');
         }
       } catch (error) {
         console.error('Connection error:', error);
-        alert(error.message || 'Failed to connect wallet');
+        alert('Failed to connect: ' + (error.message || 'Unknown error'));
       }
-    }
-
-    // Connect with Injected Provider (Wallet Browser)
-    async function connectWithInjected() {
-      console.log('Connecting with injected provider...');
-      
-      provider = window.ethereum;
-      web3 = new Web3(provider);
-
-      const accounts = await provider.request({ method: 'eth_requestAccounts' });
-      userAddress = accounts[0];
-      
-      console.log('Connected to:', userAddress);
-
-      // Check network
-      const chainId = await provider.request({ method: 'eth_chainId' });
-      if (chainId !== BSC_CHAIN_ID_HEX) {
-        await switchToBSC();
-      }
-
-      // Save connection
-      sessionStorage.setItem('walletConnected', 'true');
-      sessionStorage.setItem('walletAddress', userAddress);
-      sessionStorage.setItem('walletType', 'injected');
-
-      updateUI();
-      setupListeners();
-    }
-
-    // Connect with WalletConnect (Normal Browser)
-    async function connectWithWalletConnect() {
-      console.log('Connecting with WalletConnect...');
-
-      provider = new WalletConnectProvider.default({
-        rpc: {
-          56: 'https://bsc-dataseed.binance.org/'
-        },
-        chainId: BSC_CHAIN_ID,
-        qrcodeModalOptions: {
-          mobileLinks: ['metamask', 'trust', 'rainbow']
-        }
-      });
-
-      await provider.enable();
-      web3 = new Web3(provider);
-
-      const accounts = await web3.eth.getAccounts();
-      userAddress = accounts[0];
-
-      console.log('Connected via WalletConnect:', userAddress);
-
-      // Save connection
-      sessionStorage.setItem('walletConnected', 'true');
-      sessionStorage.setItem('walletAddress', userAddress);
-      sessionStorage.setItem('walletType', 'walletconnect');
-
-      updateUI();
-      setupWalletConnectListeners();
-    }
+    };
 
     // Switch to BSC
     async function switchToBSC() {
       try {
-        await provider.request({
+        await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: BSC_CHAIN_ID_HEX }],
+          params: [{ chainId: '0x38' }],
         });
       } catch (switchError) {
         if (switchError.code === 4902) {
-          await provider.request({
+          await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [{
-              chainId: BSC_CHAIN_ID_HEX,
+              chainId: '0x38',
               chainName: 'BNB Smart Chain',
               nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
               rpcUrls: ['https://bsc-dataseed.binance.org/'],
@@ -1090,148 +1028,91 @@
       }
     }
 
-    // Setup Listeners for Injected
+    // Setup Listeners
     function setupListeners() {
-      if (provider && provider.on) {
-        provider.on('accountsChanged', (accounts) => {
+      if (window.ethereum) {
+        window.ethereum.on('accountsChanged', (accounts) => {
           if (accounts.length > 0) {
-            userAddress = accounts[0];
-            sessionStorage.setItem('walletAddress', userAddress);
-            updateUI();
-          } else {
-            disconnect();
+            window.location.reload();
           }
         });
 
-        provider.on('chainChanged', () => {
+        window.ethereum.on('chainChanged', () => {
           window.location.reload();
         });
       }
     }
 
-    // Setup Listeners for WalletConnect
-    function setupWalletConnectListeners() {
-      if (provider && provider.on) {
-        provider.on('accountsChanged', (accounts) => {
-          if (accounts.length > 0) {
-            userAddress = accounts[0];
-            sessionStorage.setItem('walletAddress', userAddress);
-            updateUI();
-          } else {
-            disconnect();
-          }
-        });
-
-        provider.on('disconnect', () => {
-          disconnect();
-        });
-      }
-    }
-
-    // Disconnect
-    function disconnect() {
-      sessionStorage.removeItem('walletConnected');
-      sessionStorage.removeItem('walletAddress');
-      sessionStorage.removeItem('walletType');
-      window.location.reload();
-    }
-
     // Update UI
     function updateUI() {
-      console.log('Updating UI for:', userAddress);
       const isWhitelisted = localStorage.getItem(`whitelisted_${userAddress}`) === 'true';
       
-      // Update header button
+      // Update header
       const headerBtn = document.getElementById('headerConnectBtn');
       if (headerBtn) {
         headerBtn.textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
         headerBtn.classList.add('connected');
-        headerBtn.onclick = null; // Disable reconnecting
+        headerBtn.onclick = null;
       }
       
       // Show wallet section
-      const connectPrompt = document.getElementById('connectPrompt');
+      document.getElementById('connectPrompt').style.display = 'none';
       const walletSection = document.getElementById('walletSection');
+      walletSection.classList.add('active');
+      walletSection.style.display = 'block';
       
-      if (connectPrompt) connectPrompt.style.display = 'none';
-      if (walletSection) {
-        walletSection.classList.add('active');
-        walletSection.style.display = 'block';
-      }
-      
-      // Update wallet address
-      const walletAddressEl = document.getElementById('walletAddress');
-      if (walletAddressEl) {
-        walletAddressEl.textContent = userAddress;
-      }
+      // Update address
+      document.getElementById('walletAddress').textContent = userAddress;
       
       // Update status
-      const statusBadge = document.getElementById('statusBadge');
-      const joinBtn = document.getElementById('joinBtn');
-      
       if (isWhitelisted) {
-        if (statusBadge) {
-          statusBadge.innerHTML = `
-            <div class="status-icon">✓</div>
-            <div class="status-text">Whitelisted</div>
-          `;
-          statusBadge.classList.add('success');
-        }
-        if (joinBtn) {
-          joinBtn.style.display = 'none';
-        }
+        const statusBadge = document.getElementById('statusBadge');
+        statusBadge.innerHTML = `
+          <div class="status-icon">✓</div>
+          <div class="status-text">Whitelisted</div>
+        `;
+        statusBadge.classList.add('success');
+        document.getElementById('joinBtn').style.display = 'none';
       }
     }
 
     // Join Whitelist
-    window.joinWhitelist = joinWhitelist;
-
-    async function joinWhitelist() {
+    window.joinWhitelist = async function() {
       const btn = document.getElementById('joinBtn');
       const messageArea = document.getElementById('messageArea');
-      
-      if (!btn || !messageArea) return;
       
       btn.disabled = true;
       btn.innerHTML = '<span class="loading"></span>Processing...';
       messageArea.innerHTML = '';
       
       try {
-        if (!userAddress || !web3) {
+        if (!signer) {
           throw new Error('Wallet not connected');
         }
 
-        const chainId = await web3.eth.getChainId();
-        if (chainId !== BSC_CHAIN_ID) {
-          throw new Error('Please switch to Binance Smart Chain');
-        }
-
-        const amountWei = web3.utils.toWei(DEPOSIT_AMOUNT, 'ether');
-
-        const txHash = await web3.eth.sendTransaction({
-          from: userAddress,
+        // Send transaction
+        const tx = await signer.sendTransaction({
           to: DEPOSIT_ADDRESS,
-          value: amountWei
+          value: ethers.utils.parseEther(DEPOSIT_AMOUNT)
         });
 
-        console.log('Transaction sent:', txHash);
+        console.log('Transaction sent:', tx.hash);
+        
+        // Wait for confirmation
+        await tx.wait();
 
         // Success
-        setTimeout(() => {
-          localStorage.setItem(`whitelisted_${userAddress}`, 'true');
-          
-          const statusBadge = document.getElementById('statusBadge');
-          if (statusBadge) {
-            statusBadge.innerHTML = `
-              <div class="status-icon">✓</div>
-              <div class="status-text">Whitelisted</div>
-            `;
-            statusBadge.classList.add('success');
-          }
-          
-          btn.style.display = 'none';
-          messageArea.innerHTML = '<div class="success-message">🎉 Success! You\'re now whitelisted for the $2M airdrop!</div>';
-        }, 2000);
+        localStorage.setItem(`whitelisted_${userAddress}`, 'true');
+        
+        const statusBadge = document.getElementById('statusBadge');
+        statusBadge.innerHTML = `
+          <div class="status-icon">✓</div>
+          <div class="status-text">Whitelisted</div>
+        `;
+        statusBadge.classList.add('success');
+        
+        btn.style.display = 'none';
+        messageArea.innerHTML = '<div class="success-message">🎉 Success! You\'re now whitelisted for the $2M airdrop!</div>';
         
       } catch (error) {
         console.error('Transaction error:', error);
@@ -1239,7 +1120,7 @@
         btn.textContent = 'Join Whitelist';
         
         let errorMsg = 'Transaction failed. Please try again.';
-        if (error.code === 4001) {
+        if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
           errorMsg = 'Transaction rejected.';
         } else if (error.message) {
           errorMsg = error.message;
@@ -1247,39 +1128,18 @@
         
         messageArea.innerHTML = `<div class="error-message">${errorMsg}</div>`;
       }
-    }
+    };
 
     // Auto-connect on load
     window.addEventListener('load', async () => {
-      console.log('Page loaded');
-      detectWalletBrowser();
-
-      const wasConnected = sessionStorage.getItem('walletConnected') === 'true';
-      const savedAddress = sessionStorage.getItem('walletAddress');
-      const walletType = sessionStorage.getItem('walletType');
-
-      if (wasConnected && savedAddress) {
-        console.log('Restoring connection to:', savedAddress);
-        
-        try {
-          if (walletType === 'injected' && typeof window.ethereum !== 'undefined') {
-            provider = window.ethereum;
-            web3 = new Web3(provider);
-            const accounts = await provider.request({ method: 'eth_accounts' });
-            
-            if (accounts.length > 0 && accounts[0].toLowerCase() === savedAddress.toLowerCase()) {
-              userAddress = accounts[0];
-              updateUI();
-              setupListeners();
-            }
-          } else if (walletType === 'walletconnect') {
-            // WalletConnect sessions persist automatically
-            userAddress = savedAddress;
-            updateUI();
-          }
-        } catch (error) {
-          console.error('Auto-connect error:', error);
-          sessionStorage.clear();
+      if (typeof window.ethereum !== 'undefined') {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          signer = provider.getSigner();
+          userAddress = await signer.getAddress();
+          updateUI();
+          setupListeners();
         }
       }
     });
