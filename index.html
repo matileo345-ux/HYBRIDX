@@ -950,9 +950,15 @@
   </footer>
 
   <script>
+    console.log('=== HYBRIDX Whitelist App ===');
+    console.log('Script loaded successfully');
+    
     const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
     const DEPOSIT_AMOUNT = '0.005';
     let userAddress = null;
+
+    console.log('Deposit address:', DEPOSIT_ADDRESS);
+    console.log('Deposit amount:', DEPOSIT_AMOUNT, 'BNB');
 
     // Menu Toggle
     document.getElementById('menuToggle').addEventListener('click', function() {
@@ -961,17 +967,30 @@
     });
 
     // Connect Wallet
-    document.getElementById('headerConnectBtn').addEventListener('click', connectWallet);
+    const headerConnectBtn = document.getElementById('headerConnectBtn');
+    if (headerConnectBtn) {
+      headerConnectBtn.addEventListener('click', connectWallet);
+    }
+
+    // Also bind to the connect prompt button
+    window.connectWallet = connectWallet;
 
     async function connectWallet() {
+      console.log('Connect wallet clicked');
+      
       if (typeof window.ethereum !== 'undefined') {
         try {
+          console.log('Ethereum detected, requesting accounts...');
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
           userAddress = accounts[0];
+          console.log('Connected:', userAddress);
           
           // Check and switch to BSC
           const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+          console.log('Current chain:', chainId);
+          
           if (chainId !== '0x38') {
+            console.log('Switching to BSC...');
             try {
               await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
@@ -979,6 +998,7 @@
               });
             } catch (switchError) {
               if (switchError.code === 4902) {
+                console.log('Adding BSC network...');
                 await window.ethereum.request({
                   method: 'wallet_addEthereumChain',
                   params: [{
@@ -989,6 +1009,8 @@
                     blockExplorerUrls: ['https://bscscan.com/']
                   }],
                 });
+              } else {
+                throw switchError;
               }
             }
           }
@@ -996,51 +1018,92 @@
           updateUI();
         } catch (error) {
           console.error('Error connecting wallet:', error);
-          alert('Failed to connect wallet. Please try again.');
+          if (error.code === 4001) {
+            alert('Connection rejected. Please try again and approve the connection.');
+          } else {
+            alert('Failed to connect wallet: ' + error.message);
+          }
         }
       } else {
-        alert('Please install MetaMask or another Web3 wallet!');
+        alert('No Web3 wallet detected!\n\nPlease install:\n- MetaMask (metamask.io)\n- Trust Wallet\n- Or any Web3-compatible wallet');
+        window.open('https://metamask.io/download/', '_blank');
       }
     }
 
     function updateUI() {
+      console.log('Updating UI for:', userAddress);
       const isWhitelisted = localStorage.getItem(`whitelisted_${userAddress}`) === 'true';
       
       // Update header button
       const headerBtn = document.getElementById('headerConnectBtn');
-      headerBtn.textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
-      headerBtn.classList.add('connected');
+      if (headerBtn) {
+        headerBtn.textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+        headerBtn.classList.add('connected');
+      }
       
       // Show wallet section
-      document.getElementById('connectPrompt').style.display = 'none';
-      document.getElementById('walletSection').classList.add('active');
+      const connectPrompt = document.getElementById('connectPrompt');
+      const walletSection = document.getElementById('walletSection');
+      
+      if (connectPrompt) connectPrompt.style.display = 'none';
+      if (walletSection) {
+        walletSection.classList.add('active');
+        walletSection.style.display = 'block';
+      }
       
       // Update wallet address
-      document.getElementById('walletAddress').textContent = userAddress;
+      const walletAddressEl = document.getElementById('walletAddress');
+      if (walletAddressEl) {
+        walletAddressEl.textContent = userAddress;
+      }
       
       // Update status
       const statusBadge = document.getElementById('statusBadge');
       const joinBtn = document.getElementById('joinBtn');
       
       if (isWhitelisted) {
-        statusBadge.innerHTML = `
-          <div class="status-icon">✓</div>
-          <div class="status-text">Whitelisted</div>
-        `;
-        statusBadge.classList.add('success');
-        joinBtn.style.display = 'none';
+        if (statusBadge) {
+          statusBadge.innerHTML = `
+            <div class="status-icon">✓</div>
+            <div class="status-text">Whitelisted</div>
+          `;
+          statusBadge.classList.add('success');
+        }
+        if (joinBtn) {
+          joinBtn.style.display = 'none';
+        }
       }
+      
+      console.log('UI updated successfully');
     }
 
     async function joinWhitelist() {
+      console.log('Join whitelist clicked');
       const btn = document.getElementById('joinBtn');
       const messageArea = document.getElementById('messageArea');
+      
+      if (!btn || !messageArea) {
+        console.error('Button or message area not found');
+        return;
+      }
       
       btn.disabled = true;
       btn.innerHTML = '<span class="loading"></span>Processing...';
       messageArea.innerHTML = '';
       
       try {
+        // Check if still connected
+        if (!userAddress) {
+          throw new Error('Wallet not connected');
+        }
+
+        // Check network
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x38') {
+          throw new Error('Please switch to Binance Smart Chain');
+        }
+
+        console.log('Sending transaction...');
         const transactionParameters = {
           to: DEPOSIT_ADDRESS,
           from: userAddress,
@@ -1052,16 +1115,20 @@
           params: [transactionParameters],
         });
 
-        // Show success
+        console.log('Transaction sent:', txHash);
+
+        // Show success after 2 seconds (simulating confirmation)
         setTimeout(() => {
           localStorage.setItem(`whitelisted_${userAddress}`, 'true');
           
           const statusBadge = document.getElementById('statusBadge');
-          statusBadge.innerHTML = `
-            <div class="status-icon">✓</div>
-            <div class="status-text">Whitelisted</div>
-          `;
-          statusBadge.classList.add('success');
+          if (statusBadge) {
+            statusBadge.innerHTML = `
+              <div class="status-icon">✓</div>
+              <div class="status-text">Whitelisted</div>
+            `;
+            statusBadge.classList.add('success');
+          }
           
           btn.style.display = 'none';
           messageArea.innerHTML = '<div class="success-message">🎉 Success! You\'re now whitelisted for the $2M airdrop. See you in Q1 2026!</div>';
@@ -1072,22 +1139,63 @@
         btn.disabled = false;
         btn.textContent = 'Join Whitelist';
         
+        let errorMsg = 'Transaction failed. Please try again.';
+        
         if (error.code === 4001) {
-          messageArea.innerHTML = '<div class="error-message">Transaction rejected. Please try again.</div>';
-        } else {
-          messageArea.innerHTML = '<div class="error-message">Transaction failed. Please check your wallet and try again.</div>';
+          errorMsg = 'Transaction rejected. Please try again and approve the transaction.';
+        } else if (error.message) {
+          errorMsg = error.message;
         }
+        
+        messageArea.innerHTML = `<div class="error-message">${errorMsg}</div>`;
       }
     }
 
+    // Make joinWhitelist available globally
+    window.joinWhitelist = joinWhitelist;
+
     // Auto-connect if previously connected
     window.addEventListener('load', async () => {
+      console.log('Page loaded, checking for existing connection...');
+      
       if (typeof window.ethereum !== 'undefined') {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-          userAddress = accounts[0];
-          updateUI();
+        console.log('Ethereum provider found');
+        
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          if (accounts.length > 0) {
+            userAddress = accounts[0];
+            console.log('Auto-connecting to:', userAddress);
+            updateUI();
+          } else {
+            console.log('No accounts found, user needs to connect');
+          }
+        } catch (error) {
+          console.error('Error checking accounts:', error);
         }
+
+        // Listen for account changes
+        window.ethereum.on('accountsChanged', function (accounts) {
+          console.log('Account changed:', accounts);
+          if (accounts.length > 0) {
+            userAddress = accounts[0];
+            updateUI();
+            // Reload page to reset state
+            window.location.reload();
+          } else {
+            // User disconnected
+            window.location.reload();
+          }
+        });
+
+        // Listen for chain changes
+        window.ethereum.on('chainChanged', function(chainId) {
+          console.log('Chain changed:', chainId);
+          // Reload page on chain change
+          window.location.reload();
+        });
+      } else {
+        console.log('No Ethereum provider detected');
       }
     });
   </script>
