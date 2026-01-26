@@ -7,12 +7,6 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Thirdweb SDK -->
-  <script type="module">
-    import { ThirdwebSDK } from "https://esm.sh/@thirdweb-dev/sdk@4";
-    window.ThirdwebSDK = ThirdwebSDK;
-  </script>
-  
   <style>
     * {
       margin: 0;
@@ -28,7 +22,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Background Gradient */
     .bg-gradient {
       position: fixed;
       top: 0;
@@ -40,7 +33,44 @@
       z-index: 0;
     }
 
-    /* Header */
+    /* Animated particles background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(255, 107, 53, 0.5);
+      border-radius: 50%;
+      animation: float 20s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+
     header {
       position: fixed;
       top: 0;
@@ -98,6 +128,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+      position: relative;
       animation: glow 3s ease-in-out infinite;
     }
 
@@ -135,7 +168,6 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
     }
 
     .connect-btn:hover {
@@ -149,7 +181,6 @@
       color: #10b981;
     }
 
-    /* Main */
     main {
       position: relative;
       z-index: 1;
@@ -163,7 +194,47 @@
       padding: 40px 24px;
     }
 
-    /* Hero Text */
+    /* NEW: Countdown Timer */
+    .countdown-section {
+      background: rgba(255, 107, 53, 0.05);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 16px;
+    }
+
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .countdown-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #FF6B35;
+      line-height: 1;
+    }
+
+    .countdown-text {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 4px;
+    }
+
     .hero-text {
       text-align: center;
       margin-bottom: 40px;
@@ -175,7 +246,6 @@
       color: rgba(255, 255, 255, 0.7);
     }
 
-    /* Main Card */
     .main-card {
       background: rgba(30, 10, 30, 0.6);
       border: 2px solid rgba(255, 107, 53, 0.3);
@@ -202,14 +272,12 @@
       z-index: 1;
     }
 
-    /* Logo */
     .card-logo {
       display: flex;
       justify-content: center;
       margin-bottom: 24px;
     }
 
-    /* Tagline */
     .card-tagline {
       text-align: center;
       font-size: 16px;
@@ -218,7 +286,6 @@
       margin-bottom: 40px;
     }
 
-    /* Wallet Section */
     .wallet-section {
       display: none;
     }
@@ -246,6 +313,53 @@
       font-size: 18px;
       color: #ffffff;
       word-break: break-all;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* NEW: Copy button */
+    .copy-btn {
+      padding: 6px 12px;
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 6px;
+      color: #FF6B35;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 107, 53, 0.2);
+    }
+
+    .copy-btn.copied {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    /* NEW: Network indicator */
+    .network-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: #10b981;
+      margin-top: 12px;
+    }
+
+    .network-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
     }
 
     .status-badge {
@@ -291,7 +405,6 @@
       color: #10b981;
     }
 
-    /* Join Button */
     .join-btn {
       width: 100%;
       padding: 18px;
@@ -318,7 +431,6 @@
       transform: none;
     }
 
-    /* Connect Prompt */
     .connect-prompt {
       text-align: center;
       padding: 40px 20px;
@@ -348,7 +460,6 @@
       box-shadow: 0 10px 30px rgba(139, 63, 187, 0.4);
     }
 
-    /* Messages */
     .success-message {
       margin-top: 20px;
       padding: 16px 20px;
@@ -371,7 +482,22 @@
       font-size: 15px;
     }
 
-    /* Info Section */
+    /* NEW: Transaction link */
+    .tx-link {
+      margin-top: 12px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .tx-link a {
+      color: #FF6B35;
+      text-decoration: none;
+    }
+
+    .tx-link a:hover {
+      text-decoration: underline;
+    }
+
     .info-section {
       margin-top: 60px;
     }
@@ -388,6 +514,14 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 16px;
       text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .info-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 107, 53, 0.3);
+      transform: translateY(-4px);
     }
 
     .info-number {
@@ -402,7 +536,22 @@
       color: rgba(255, 255, 255, 0.6);
     }
 
-    /* Features Section */
+    /* NEW: Live counter animation */
+    @keyframes countUp {
+      from {
+        transform: translateY(10px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .info-number.updating {
+      animation: countUp 0.3s ease;
+    }
+
     .features-section {
       margin-top: 80px;
       padding: 60px 40px;
@@ -454,7 +603,6 @@
       color: rgba(255, 255, 255, 0.6);
     }
 
-    /* Coming Soon Section */
     .coming-soon-section {
       margin-top: 60px;
       padding: 40px 0;
@@ -564,6 +712,9 @@
       cursor: pointer;
       transition: all 0.3s ease;
       font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      display: block;
+      text-align: center;
     }
 
     .cs-button:hover {
@@ -572,7 +723,6 @@
       color: #FF6B35;
     }
 
-    /* Loading Spinner */
     .loading {
       display: inline-block;
       width: 20px;
@@ -589,7 +739,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Mobile Menu */
     .menu-toggle {
       position: fixed;
       bottom: 24px;
@@ -681,7 +830,6 @@
       color: #FF6B35;
     }
 
-    /* Footer */
     footer {
       margin-top: 80px;
       padding: 40px 24px;
@@ -712,7 +860,6 @@
       opacity: 0.7;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .logo-text {
         font-size: 20px;
@@ -748,13 +895,20 @@
       .coming-soon-card {
         padding: 24px;
       }
+      .countdown-number {
+        font-size: 24px;
+      }
+      .wallet-address {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
   <div class="bg-gradient"></div>
+  <div class="particles" id="particles"></div>
 
-  <!-- Header -->
   <header>
     <div class="header-content">
       <div class="logo">
@@ -775,13 +929,12 @@
         <div class="logo-text">HYBRIDX</div>
       </div>
       <div class="header-right">
-        <a href="hybridxlabs.html" class="labs-link">HYBRIDX Labs</a>
+        <a href="#labs" class="labs-link">HYBRIDX Labs</a>
         <button class="connect-btn" id="headerConnectBtn">Connect Wallet</button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Menu Toggle -->
   <button class="menu-toggle" id="menuToggle">
     <div class="hamburger">
       <span class="bar"></span>
@@ -790,28 +943,23 @@
     </div>
   </button>
 
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#" class="menu-item">Home</a>
-    <a href="hybridxlabs.html" class="menu-item">HYBRIDX Labs</a>
+    <a href="#labs" class="menu-item">HYBRIDX Labs</a>
     <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="menu-item">Twitter</a>
     <a href="#" class="menu-item">Telegram</a>
     <a href="#" class="menu-item">Docs</a>
   </div>
 
-  <!-- Main Content -->
   <main>
     <div class="container">
-      <!-- Hero Text -->
       <div class="hero-text">
         <p>Secure your spot in the HYBRIDX ecosystem. Connect your wallet and join the whitelist to access on-chain capital markets infrastructure.</p>
       </div>
 
-      <!-- Main Card -->
       <div class="main-card">
         <div class="card-glow"></div>
         <div class="card-content">
-          <!-- Logo -->
           <div class="card-logo">
             <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
               <path d="M20 40C20 40 30 20 50 20C70 20 80 40 80 40" stroke="#FF6B35" stroke-width="5" stroke-linecap="round"/>
@@ -819,20 +967,24 @@
             </svg>
           </div>
 
-          <!-- Tagline -->
           <div class="card-tagline">The Future of Hybrid Launchpool</div>
 
-          <!-- Connect Prompt (Shown when not connected) -->
           <div class="connect-prompt" id="connectPrompt">
             <p>Connect your wallet to join</p>
             <button class="connect-prompt-btn" onclick="connectWallet()">Connect Wallet</button>
           </div>
 
-          <!-- Wallet Section (Shown after connection) -->
           <div class="wallet-section" id="walletSection">
             <div class="wallet-info">
               <div class="wallet-label">Wallet Address</div>
-              <div class="wallet-address" id="walletAddress">0x0000...0000</div>
+              <div class="wallet-address">
+                <span id="walletAddress">0x0000...0000</span>
+                <button class="copy-btn" id="copyBtn" onclick="copyAddress()">Copy</button>
+              </div>
+              <div class="network-badge">
+                <span class="network-dot"></span>
+                <span>BNB Smart Chain</span>
+              </div>
             </div>
 
             <div class="status-badge" id="statusBadge">
@@ -847,7 +999,6 @@
         </div>
       </div>
 
-      <!-- Info Section -->
       <div class="info-section">
         <div class="info-grid">
           <div class="info-card">
@@ -856,7 +1007,7 @@
           </div>
           <div class="info-card">
             <div class="info-number">20,000</div>
-            <div class="info-label">Spots</div>
+            <div class="info-label">Total Spots</div>
           </div>
           <div class="info-card">
             <div class="info-number">Q1 2026</div>
@@ -865,7 +1016,6 @@
         </div>
       </div>
 
-      <!-- Features Section -->
       <div class="features-section">
         <h3 class="features-title">🛡️ Secure & Trustless</h3>
         <div class="feature-item">
@@ -891,8 +1041,7 @@
         </div>
       </div>
 
-      <!-- Coming Soon Section -->
-      <div class="coming-soon-section">
+      <div class="coming-soon-section" id="labs">
         <h3 class="coming-soon-title">HYBRIDX Labs - Coming Soon</h3>
         <div class="coming-soon-card">
           <div class="cs-header">
@@ -935,14 +1084,13 @@
           </div>
 
           <div class="cs-footer">
-            <a href="hybridxlabs.html" class="cs-button" style="text-decoration: none; display: block;">View HYBRIDX Labs →</a>
+            <a href="#" class="cs-button">View HYBRIDX Labs →</a>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer>
     <p class="footer-text">© 2026 HYBRIDX. All rights reserved.</p>
     <div class="social-links">
@@ -952,19 +1100,27 @@
     </div>
   </footer>
 
-  <script type="module">
-    // Import ethers from CDN
-    import { ethers } from 'https://cdn.ethers.io/lib/ethers-5.7.esm.min.js';
-    
-    console.log('=== HYBRIDX Whitelist (Thirdweb Edition) ===');
-    
+  <script src="https://cdn.jsdelivr.net/npm/thirdweb@latest/dist/thirdweb.umd.js"></script>
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+  <script>
     const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
     const DEPOSIT_AMOUNT = '0.005';
-    const BSC_CHAIN_ID = 56;
-    
-    let provider = null;
-    let signer = null;
+    const THIRDWEB_CLIENT_ID = 'c5f37a1f6ff5f451d5a34d384c6c4758';
     let userAddress = null;
+    let sdk = null;
+
+    // Create animated particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
 
     // Menu Toggle
     document.getElementById('menuToggle').addEventListener('click', function() {
@@ -972,112 +1128,97 @@
       document.getElementById('mobileMenu').classList.toggle('active');
     });
 
-    // Connect Wallet
-    window.connectWallet = async function() {
-      console.log('Connecting wallet...');
-      
+    // Copy address function
+    function copyAddress() {
+      const address = document.getElementById('walletAddress').textContent;
+      navigator.clipboard.writeText(address).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Connect Wallet with Thirdweb
+    document.getElementById('headerConnectBtn').addEventListener('click', connectWallet);
+
+    async function connectWallet() {
       try {
+        // Initialize Thirdweb SDK
+        if (!sdk) {
+          sdk = new ThirdwebSDK.ThirdwebSDK('binance', {
+            clientId: THIRDWEB_CLIENT_ID
+          });
+        }
+
+        // Check if MetaMask/wallet is available
         if (typeof window.ethereum !== 'undefined') {
-          // Request accounts
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          userAddress = accounts[0];
           
-          // Create provider and signer
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          signer = provider.getSigner();
-          userAddress = await signer.getAddress();
-          
-          console.log('Connected:', userAddress);
-          
-          // Check network
-          const network = await provider.getNetwork();
-          if (network.chainId !== BSC_CHAIN_ID) {
-            await switchToBSC();
+          // Check and switch to BSC network
+          const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+          if (chainId !== '0x38') {
+            try {
+              await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x38' }],
+              });
+            } catch (switchError) {
+              if (switchError.code === 4902) {
+                await window.ethereum.request({
+                  method: 'wallet_addEthereumChain',
+                  params: [{
+                    chainId: '0x38',
+                    chainName: 'BNB Smart Chain',
+                    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                    blockExplorerUrls: ['https://bscscan.com/']
+                  }],
+                });
+              }
+            }
           }
           
           updateUI();
-          setupListeners();
         } else {
-          alert('Please install MetaMask, Trust Wallet, or another Web3 wallet!');
+          alert('Please install MetaMask or another Web3 wallet!');
         }
       } catch (error) {
-        console.error('Connection error:', error);
-        alert('Failed to connect: ' + (error.message || 'Unknown error'));
-      }
-    };
-
-    // Switch to BSC
-    async function switchToBSC() {
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x38' }],
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{
-              chainId: '0x38',
-              chainName: 'BNB Smart Chain',
-              nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-              rpcUrls: ['https://bsc-dataseed.binance.org/'],
-              blockExplorerUrls: ['https://bscscan.com/']
-            }],
-          });
-        }
+        console.error('Error connecting wallet:', error);
+        alert('Failed to connect wallet. Please try again.');
       }
     }
 
-    // Setup Listeners
-    function setupListeners() {
-      if (window.ethereum) {
-        window.ethereum.on('accountsChanged', (accounts) => {
-          if (accounts.length > 0) {
-            window.location.reload();
-          }
-        });
-
-        window.ethereum.on('chainChanged', () => {
-          window.location.reload();
-        });
-      }
-    }
-
-    // Update UI
     function updateUI() {
       const isWhitelisted = localStorage.getItem(`whitelisted_${userAddress}`) === 'true';
       
-      // Update header
       const headerBtn = document.getElementById('headerConnectBtn');
-      if (headerBtn) {
-        headerBtn.textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
-        headerBtn.classList.add('connected');
-        headerBtn.onclick = null;
-      }
+      headerBtn.textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+      headerBtn.classList.add('connected');
       
-      // Show wallet section
       document.getElementById('connectPrompt').style.display = 'none';
-      const walletSection = document.getElementById('walletSection');
-      walletSection.classList.add('active');
-      walletSection.style.display = 'block';
+      document.getElementById('walletSection').classList.add('active');
       
-      // Update address
       document.getElementById('walletAddress').textContent = userAddress;
       
-      // Update status
+      const statusBadge = document.getElementById('statusBadge');
+      const joinBtn = document.getElementById('joinBtn');
+      
       if (isWhitelisted) {
-        const statusBadge = document.getElementById('statusBadge');
         statusBadge.innerHTML = `
           <div class="status-icon">✓</div>
           <div class="status-text">Whitelisted</div>
         `;
         statusBadge.classList.add('success');
-        document.getElementById('joinBtn').style.display = 'none';
+        joinBtn.style.display = 'none';
       }
     }
 
-    // Join Whitelist
-    window.joinWhitelist = async function() {
+    async function joinWhitelist() {
       const btn = document.getElementById('joinBtn');
       const messageArea = document.getElementById('messageArea');
       
@@ -1086,22 +1227,20 @@
       messageArea.innerHTML = '';
       
       try {
-        if (!signer) {
-          throw new Error('Wallet not connected');
-        }
-
-        // Send transaction
+        // Use Thirdweb SDK for better transaction handling
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        
         const tx = await signer.sendTransaction({
           to: DEPOSIT_ADDRESS,
           value: ethers.utils.parseEther(DEPOSIT_AMOUNT)
         });
 
-        console.log('Transaction sent:', tx.hash);
+        messageArea.innerHTML = '<div class="success-message">⏳ Transaction submitted! Waiting for confirmation...</div>';
         
-        // Wait for confirmation
-        await tx.wait();
+        // Wait for transaction confirmation
+        const receipt = await tx.wait();
 
-        // Success
         localStorage.setItem(`whitelisted_${userAddress}`, 'true');
         
         const statusBadge = document.getElementById('statusBadge');
@@ -1112,34 +1251,39 @@
         statusBadge.classList.add('success');
         
         btn.style.display = 'none';
-        messageArea.innerHTML = '<div class="success-message">🎉 Success! You\'re now whitelisted for the $2M airdrop!</div>';
+        messageArea.innerHTML = `
+          <div class="success-message">
+            🎉 Success! You're now whitelisted for the $2M airdrop.
+            <div class="tx-link">
+              <a href="https://bscscan.com/tx/${receipt.transactionHash}" target="_blank">View transaction →</a>
+            </div>
+          </div>
+        `;
         
       } catch (error) {
         console.error('Transaction error:', error);
         btn.disabled = false;
         btn.textContent = 'Join Whitelist';
         
-        let errorMsg = 'Transaction failed. Please try again.';
         if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
-          errorMsg = 'Transaction rejected.';
-        } else if (error.message) {
-          errorMsg = error.message;
+          messageArea.innerHTML = '<div class="error-message">❌ Transaction rejected. Please try again.</div>';
+        } else if (error.code === 'INSUFFICIENT_FUNDS') {
+          messageArea.innerHTML = '<div class="error-message">❌ Insufficient BNB balance. Please add funds to your wallet.</div>';
+        } else {
+          messageArea.innerHTML = '<div class="error-message">❌ Transaction failed. Please check your wallet and try again.</div>';
         }
-        
-        messageArea.innerHTML = `<div class="error-message">${errorMsg}</div>`;
       }
-    };
+    }
 
-    // Auto-connect on load
+    // Initialize
     window.addEventListener('load', async () => {
+      createParticles();
+      
       if (typeof window.ethereum !== 'undefined') {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          signer = provider.getSigner();
-          userAddress = await signer.getAddress();
+          userAddress = accounts[0];
           updateUI();
-          setupListeners();
         }
       }
     });
