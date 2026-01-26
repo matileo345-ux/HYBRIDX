@@ -1100,14 +1100,12 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/thirdweb@latest/dist/thirdweb.umd.js"></script>
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
   <script>
     const DEPOSIT_ADDRESS = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
     const DEPOSIT_AMOUNT = '0.005';
-    const THIRDWEB_CLIENT_ID = 'c5f37a1f6ff5f451d5a34d384c6c4758';
     let userAddress = null;
-    let sdk = null;
+    let provider = null;
 
     // Create animated particles
     function createParticles() {
@@ -1142,54 +1140,64 @@
       });
     }
 
-    // Connect Wallet with Thirdweb
+    // Connect Wallet - Mobile Friendly
     document.getElementById('headerConnectBtn').addEventListener('click', connectWallet);
 
     async function connectWallet() {
       try {
-        // Initialize Thirdweb SDK
-        if (!sdk) {
-          sdk = new ThirdwebSDK.ThirdwebSDK('binance', {
-            clientId: THIRDWEB_CLIENT_ID
-          });
-        }
-
-        // Check if MetaMask/wallet is available
+        // Check if user is on mobile and has MetaMask app
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
         if (typeof window.ethereum !== 'undefined') {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          // Desktop or mobile with injected wallet
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
           userAddress = accounts[0];
           
           // Check and switch to BSC network
-          const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-          if (chainId !== '0x38') {
+          const network = await provider.getNetwork();
+          if (network.chainId !== 56) {
             try {
-              await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x38' }],
-              });
+              await provider.send('wallet_switchEthereumChain', [{ chainId: '0x38' }]);
             } catch (switchError) {
+              // Network not added, let's add it
               if (switchError.code === 4902) {
-                await window.ethereum.request({
-                  method: 'wallet_addEthereumChain',
-                  params: [{
-                    chainId: '0x38',
-                    chainName: 'BNB Smart Chain',
-                    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                    blockExplorerUrls: ['https://bscscan.com/']
-                  }],
-                });
+                await provider.send('wallet_addEthereumChain', [{
+                  chainId: '0x38',
+                  chainName: 'BNB Smart Chain',
+                  nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                  rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                  blockExplorerUrls: ['https://bscscan.com/']
+                }]);
+              } else {
+                throw switchError;
               }
             }
           }
           
           updateUI();
+        } else if (isMobile) {
+          // Mobile without wallet - open MetaMask app or Trust Wallet
+          const dappUrl = window.location.href;
+          const metamaskUrl = `https://metamask.app.link/dapp/${dappUrl.replace('https://', '')}`;
+          window.location.href = metamaskUrl;
         } else {
-          alert('Please install MetaMask or another Web3 wallet!');
+          // Desktop without wallet
+          alert('Please install MetaMask browser extension!\n\nVisit: https://metamask.io/download/');
         }
       } catch (error) {
         console.error('Error connecting wallet:', error);
-        alert('Failed to connect wallet. Please try again.');
+        let errorMsg = 'Failed to connect wallet. ';
+        
+        if (error.code === 4001) {
+          errorMsg += 'You rejected the connection request.';
+        } else if (error.code === -32002) {
+          errorMsg += 'Please check MetaMask - there may be a pending request.';
+        } else {
+          errorMsg += 'Please try again.';
+        }
+        
+        alert(errorMsg);
       }
     }
 
@@ -1227,8 +1235,10 @@
       messageArea.innerHTML = '';
       
       try {
-        // Use Thirdweb SDK for better transaction handling
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        if (!provider) {
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+        }
+        
         const signer = provider.getSigner();
         
         const tx = await signer.sendTransaction({
@@ -1265,13 +1275,19 @@
         btn.disabled = false;
         btn.textContent = 'Join Whitelist';
         
+        let errorMsg = '';
+        
         if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
-          messageArea.innerHTML = '<div class="error-message">❌ Transaction rejected. Please try again.</div>';
+          errorMsg = '❌ Transaction rejected. Please try again.';
         } else if (error.code === 'INSUFFICIENT_FUNDS') {
-          messageArea.innerHTML = '<div class="error-message">❌ Insufficient BNB balance. Please add funds to your wallet.</div>';
+          errorMsg = '❌ Insufficient BNB balance. Please add funds to your wallet.';
+        } else if (error.message && error.message.includes('insufficient funds')) {
+          errorMsg = '❌ Insufficient BNB balance. You need at least 0.005 BNB plus gas fees.';
         } else {
-          messageArea.innerHTML = '<div class="error-message">❌ Transaction failed. Please check your wallet and try again.</div>';
+          errorMsg = '❌ Transaction failed. Please check your wallet and try again.';
         }
+        
+        messageArea.innerHTML = `<div class="error-message">${errorMsg}</div>`;
       }
     }
 
