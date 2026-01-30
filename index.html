@@ -860,6 +860,187 @@
       opacity: 0.7;
     }
 
+    /* Litepaper Modal */
+    .litepaper-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      overflow-y: auto;
+      padding: 80px 20px 40px;
+    }
+
+    .litepaper-modal.active {
+      display: block;
+    }
+
+    .litepaper-content {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(20, 10, 20, 0.8);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 24px;
+      padding: 48px;
+      position: relative;
+    }
+
+    .litepaper-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 12px;
+      color: #FF6B35;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .litepaper-close:hover {
+      background: rgba(255, 107, 53, 0.2);
+    }
+
+    .litepaper-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .litepaper-title {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FF6B35 0%, #FCBA04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .litepaper-subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+    }
+
+    .litepaper-date {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .litepaper-section {
+      margin-bottom: 40px;
+    }
+
+    .litepaper-section h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #FF6B35;
+      margin-bottom: 16px;
+    }
+
+    .litepaper-section h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+
+    .litepaper-section p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 16px;
+    }
+
+    .litepaper-section ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 16px;
+    }
+
+    .litepaper-section li {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 12px;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .litepaper-section li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #FF6B35;
+      font-weight: 700;
+    }
+
+    .highlight-box {
+      background: rgba(255, 107, 53, 0.05);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .tokenomics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .tokenomics-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .tokenomics-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FCBA04;
+      margin-bottom: 4px;
+    }
+
+    .tokenomics-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      .litepaper-modal {
+        padding: 60px 16px 20px;
+      }
+      .litepaper-content {
+        padding: 32px 24px;
+      }
+      .litepaper-title {
+        font-size: 28px;
+      }
+      .litepaper-section h2 {
+        font-size: 24px;
+      }
+      .tokenomics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 768px) {
       .logo-text {
         font-size: 20px;
@@ -929,6 +1110,7 @@
         <div class="logo-text">HYBRIDX</div>
       </div>
       <div class="header-right">
+        <a href="#litepaper" class="labs-link" onclick="openLitepaper(event)">Litepaper</a>
         <a href="#labs" class="labs-link">HYBRIDX Labs</a>
         <button class="connect-btn" id="headerConnectBtn">Connect Wallet</button>
       </div>
@@ -945,10 +1127,113 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="#" class="menu-item">Home</a>
+    <a href="#litepaper" class="menu-item" onclick="openLitepaper(event)">Litepaper</a>
     <a href="#labs" class="menu-item">HYBRIDX Labs</a>
     <a href="https://x.com/HYBRIDX_HYBX" target="_blank" class="menu-item">Twitter</a>
     <a href="#" class="menu-item">Telegram</a>
     <a href="#" class="menu-item">Docs</a>
+  </div>
+
+  <!-- Litepaper Modal -->
+  <div class="litepaper-modal" id="litepaperModal">
+    <div class="litepaper-content">
+      <button class="litepaper-close" onclick="closeLitepaper()">×</button>
+      
+      <div class="litepaper-header">
+        <h1 class="litepaper-title">HYBRIDX Litepaper v2.0</h1>
+        <p class="litepaper-subtitle">World's First Hybrid DeFi Launchpool on BSC</p>
+        <p class="litepaper-date">January 2026</p>
+      </div>
+
+      <div class="litepaper-section">
+        <h2>Vision</h2>
+        <p>HYBRIDX is building the fairest and most inclusive launchpool on Binance Smart Chain.</p>
+        <p><strong>No VC rounds. No private sales. No insider allocations.</strong></p>
+        <p>Just pure community participation — starting with 20,000 whitelisted wallets sharing $1M in BNB + $1M in HYBRIDX tokens.</p>
+      </div>
+
+      <div class="litepaper-section">
+        <h2>The Problem We Solve</h2>
+        <p>Most DeFi launchpools today suffer from:</p>
+        <ul>
+          <li>Unfair token distribution (whales & VCs take the majority)</li>
+          <li>High entry barriers (large minimum stakes)</li>
+          <li>Low trust (presales, rugs, unverified participants)</li>
+          <li>Limited rewards for early retail supporters</li>
+        </ul>
+        <p>HYBRIDX fixes this with a simple, verifiable, low-barrier whitelist model.</p>
+      </div>
+
+      <div class="litepaper-section">
+        <h2>How It Works (Whitelist Phase – Now Live)</h2>
+        
+        <h3>1. Connect Wallet (BSC network only)</h3>
+        <p>Transaction confirms → you are automatically whitelisted. Only the first 20,000 verified wallets qualify.</p>
+
+        <h3>2. Massive Airdrop</h3>
+        <div class="highlight-box">
+          <ul>
+            <li><strong>Total Pool:</strong> $1,000,000 BNB + $1,000,000 HYBRIDX tokens</li>
+            <li><strong>Eligible:</strong> First 20,000 whitelisted wallets</li>
+            <li><strong>Distribution:</strong> Pro-rata or equal share (final method announced at launch)</li>
+            <li><strong>Timing:</strong> Airdropped within 7 days after main app launch (Q2 2026)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="litepaper-section">
+        <h2>Tokenomics Snapshot</h2>
+        <div class="tokenomics-grid">
+          <div class="tokenomics-item">
+            <div class="tokenomics-value">100M</div>
+            <div class="tokenomics-label">Total Supply</div>
+          </div>
+          <div class="tokenomics-item">
+            <div class="tokenomics-value">30%</div>
+            <div class="tokenomics-label">Community</div>
+          </div>
+          <div class="tokenomics-item">
+            <div class="tokenomics-value">20%</div>
+            <div class="tokenomics-label">Liquidity</div>
+          </div>
+          <div class="tokenomics-item">
+            <div class="tokenomics-value">10%</div>
+            <div class="tokenomics-label">Airdrop Reserve</div>
+          </div>
+        </div>
+        
+        <ul style="margin-top: 24px;">
+          <li><strong>Token:</strong> HYBRIDX (BEP-20 on BSC)</li>
+          <li><strong>Total Supply:</strong> 100,000,000 HYBRIDX</li>
+          <li><strong>Community Allocation:</strong> 30% (30M tokens) → majority to whitelist & launchpool participants</li>
+          <li><strong>Airdrop Reserve:</strong> 10% (10M tokens) + equivalent BNB value</li>
+          <li><strong>Liquidity:</strong> 20% locked on PancakeSwap at launch</li>
+          <li><strong>Team & Development:</strong> 20% vested 24 months</li>
+        </ul>
+      </div>
+
+      <div class="litepaper-section">
+        <h2>Roadmap Highlights</h2>
+        <ul>
+          <li><strong>Q1 2026 (Now):</strong> Whitelist campaign live (20,000 spots)</li>
+          <li><strong>Q2 2026:</strong> Main app launch + First HYBRIDX Launchpool (stake BNB → earn HYBRIDX)</li>
+          <li><strong>Post-Launchpool:</strong> HYBRIDX token DEX listing on PancakeSwap</li>
+          <li><strong>Q2 2026+:</strong> Advanced staking pools, governance DAO, Tier-1 CEX listings</li>
+        </ul>
+      </div>
+
+      <div class="litepaper-section">
+        <h2>Why Join Now?</h2>
+        <div class="highlight-box">
+          <ul>
+            <li>Extremely low entry</li>
+            <li>Guaranteed share of $2M total airdrop pool</li>
+            <li>Priority multipliers in the upcoming launchpool</li>
+            <li>Be part of the world's first truly hybrid DeFi launchpool</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <main>
@@ -1122,6 +1407,28 @@
     document.getElementById('menuToggle').addEventListener('click', function() {
       this.classList.toggle('active');
       document.getElementById('mobileMenu').classList.toggle('active');
+    });
+
+    // Litepaper Modal
+    function openLitepaper(event) {
+      event.preventDefault();
+      document.getElementById('litepaperModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Close mobile menu if open
+      document.getElementById('mobileMenu').classList.remove('active');
+      document.getElementById('menuToggle').classList.remove('active');
+    }
+
+    function closeLitepaper() {
+      document.getElementById('litepaperModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close litepaper when clicking outside
+    document.getElementById('litepaperModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeLitepaper();
+      }
     });
 
     // Copy address function
